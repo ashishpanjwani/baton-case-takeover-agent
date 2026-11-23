@@ -1,0 +1,18 @@
+CMS TASK HISTORY EXPORT — Matter CW-2026-0187 — Johnson, Sarah
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Exported 11/02/2026
+
+T-101 | Send letters of representation (Granite Mutual, Lakeshore) | Assigned: D. Whitfield | Created 03/06/2026 | Due 03/09/2026 | Status: Completed | Completed 03/09/2026
+T-102 | Order police report — Harborview PD | Assigned: D. Whitfield | Created 03/06/2026 | Due 03/20/2026 | Status: Completed | Completed 03/27/2026
+T-103 | Request records & bills — St. Brendan Regional Medical Center | Assigned: D. Whitfield | Created 04/03/2026 | Due 04/10/2026 | Status: Completed | Completed 04/28/2026
+T-104 | Request bill — Harborview Fire Rescue | Assigned: D. Whitfield | Created 04/03/2026 | Due 04/10/2026 | Status: Completed | Completed 04/30/2026
+T-105 | Request records & bills — Northgate Spine & Chiropractic | Assigned: D. Whitfield | Created 04/28/2026 | Due 05/05/2026 | Status: Completed | Completed 06/10/2026
+T-106 | Request records & bills — Harborview Orthopedic Associates | Assigned: D. Whitfield | Created 04/28/2026 | Due 05/12/2026 | Status: Completed | Completed 06/03/2026
+T-107 | Request MRI report & bill — ClearView Imaging Center | Assigned: D. Whitfield | Created 04/28/2026 | Due 06/01/2026 | Status: Open | Completed —
+T-108 | Submit MedPay application — Lakeshore | Assigned: D. Whitfield | Created 05/12/2026 | Due 05/20/2026 | Status: Completed | Completed 05/20/2026
+T-109 | Request BI policy limits — Granite Mutual | Assigned: D. Whitfield | Created 06/24/2026 | Due 07/01/2026 | Status: Completed | Completed 07/01/2026
+T-110 | Monthly client check-in — August | Assigned: D. Whitfield | Created 08/01/2026 | Due 08/15/2026 | Status: Completed | Completed 08/12/2026
+T-111 | Monthly client check-in — September | Assigned: D. Whitfield | Created 09/01/2026 | Due 09/15/2026 | Status: Open | Completed —
+T-112 | Follow up — Harborview Ortho 04/29 office note | Assigned: D. Whitfield | Created 06/03/2026 | Due 07/03/2026 | Status: Open | Completed —
+T-113 | Return client voicemail | Assigned: D. Whitfield | Created 09/22/2026 | Due 09/23/2026 | Status: Open | Completed —
+T-114 | Monthly client check-in — October | Assigned: D. Whitfield | Created 10/01/2026 | Due 10/15/2026 | Status: Open | Completed —

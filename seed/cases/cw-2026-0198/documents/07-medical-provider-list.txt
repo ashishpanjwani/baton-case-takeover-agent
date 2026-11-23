@@ -1,0 +1,19 @@
+MEDICAL PROVIDER LIST — Whitaker, James (CW-2026-0198)
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Maintained by: D. Whitfield. Last updated 10/07/2026.
+
+1. Harborview Fire Rescue (ambulance), 08/21/2026
+   Records: Not requested. Bills: Not requested. Note: paid by workers' comp?
+
+2. St. Brendan Medical Center — Emergency Department, 08/21/2026
+   Records: Requested 09/08/2026. Received 09/15/2026 by fax.
+   Bills: Not requested. Note: workers' comp is paying.
+
+3. Lakeview Spine & Orthopedics — Dr. Nadia Brooks, from 09/14/2026
+   Records: Consult and MRI report of 10/06/2026 received 10/07/2026 (sent by the office).
+   Bills: Not requested.
+   Status: Surgery recommended. Authorization requested from workers' comp.
+
+4. Riverside Physical Therapy (wrist), from 09/28/2026
+   Records: Requested 10/01/2026. Not received.
+   Bills: Not requested.

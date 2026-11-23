@@ -1,0 +1,23 @@
+{
+  "id": "cw-2026-0233",
+  "firm": "Calder & Wynn Injury Law (fictional)",
+  "assignedAttorney": "Marcus Hale",
+  "incomingCaseManager": "You",
+  "reassignedOn": "2026-10-31",
+  "documents": [
+    { "id": "doc-01", "filename": "01-intake-notes.txt", "title": "Initial intake notes", "category": "Intake", "documentDate": "2026-09-16" },
+    { "id": "doc-02", "filename": "02-animal-services-report.pdf", "title": "Animal Services bite report AS-26-04417", "category": "Liability", "documentDate": "2026-09-14" },
+    { "id": "doc-03", "filename": "03-client-information-sheet.txt", "title": "Client information sheet", "category": "Client", "documentDate": "2026-09-16" },
+    { "id": "doc-04", "filename": "04-quickmed-urgent-care-record.pdf", "title": "QuickMed urgent care visit record (patient copy)", "category": "Medical records", "documentDate": "2026-09-13" },
+    { "id": "doc-05", "filename": "05-medical-provider-list.txt", "title": "Medical provider list", "category": "Medical", "documentDate": "2026-10-16" },
+    { "id": "doc-06", "filename": "06-cascade-plastic-surgery-records.txt", "title": "Cascade Plastic Surgery consult (10/08/2026)", "category": "Medical records", "documentDate": "2026-10-16" },
+    { "id": "doc-07", "filename": "07-quickmed-records-request-correspondence.txt", "title": "QuickMed records request correspondence", "category": "Correspondence", "documentDate": "2026-10-20" },
+    { "id": "doc-08", "filename": "08-letter-to-dog-owner.txt", "title": "Letter to dog owner (insurance request)", "category": "Correspondence", "documentDate": "2026-10-01" },
+    { "id": "doc-09", "filename": "09-employer-wage-verification.txt", "title": "Employer wage verification", "category": "Damages", "documentDate": "2026-10-10" },
+    { "id": "doc-10", "filename": "10-client-communication-log.txt", "title": "Client communication log", "category": "Client", "documentDate": "2026-10-20" },
+    { "id": "doc-11", "filename": "11-cms-case-notes.txt", "title": "CMS case notes", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-12", "filename": "12-cms-task-history.txt", "title": "CMS task history export", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-13", "filename": "13-cms-document-index.txt", "title": "CMS document index", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-14", "filename": "14-reassignment-memo.txt", "title": "Reassignment memo", "category": "Internal", "documentDate": "2026-10-31" }
+  ]
+}

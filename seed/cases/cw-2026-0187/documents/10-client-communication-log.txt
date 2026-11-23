@@ -1,0 +1,29 @@
+CLIENT COMMUNICATION LOG — Johnson, Sarah (CW-2026-0187)
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+
+03/06/2026 | In person | P. Nair
+Intake meeting. Retainer and HIPAA authorizations signed. See intake notes.
+
+03/13/2026 | Phone (outbound) | D. Whitfield
+Introduced myself as case manager. Client confirmed she started chiropractic at Northgate Spine & Chiropractic on 03/10/2026. Explained MedPay and what to expect next.
+
+03/20/2026 | Text (inbound) | D. Whitfield
+Client says she saw orthopedist Dr. Calloway on 03/18. MRI of left shoulder being scheduled.
+
+04/15/2026 | Phone (outbound) | D. Whitfield
+Monthly check-in. Client had MRI on 04/02. Dr. Calloway told her there is a partial tear and wants her to start physical therapy. Still at chiro 2x/week.
+
+05/14/2026 | Phone (outbound) | D. Whitfield
+Monthly check-in. Client started PT at Bayside Physical Therapy on 05/04/2026, 2x/week. Chiro reduced to 1x/week.
+
+06/20/2026 | Phone (inbound) | D. Whitfield
+Client reports a neck pain flare-up; she went to QuickCare Urgent Care (Eastside) on 06/14/2026 and was given a muscle relaxer. Continuing PT. Told client we would add the urgent care visit to her provider list.
+
+07/16/2026 | Text (outbound) | D. Whitfield
+Check-in text sent. Client replied: "PT going ok, ortho appt next month."
+
+08/12/2026 | Phone (inbound) | D. Whitfield
+Client finished PT at Bayside on 07/31/2026 and was discharged from chiro on 07/24/2026. Saw Dr. Calloway on 08/10/2026 — shoulder still painful. Dr. Calloway discussed a possible injection and wants to see her again in 6 weeks. Client gave a new cell number: (216) 555-0163. Her old number will be disconnected after 08/31.
+
+09/22/2026 | Voicemail (inbound) | D. Whitfield
+VM from client asking for an update on her case and whether she needs to send us anything. Callback needed.

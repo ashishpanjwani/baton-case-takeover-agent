@@ -1,0 +1,47 @@
+RECORDS REQUEST CORRESPONDENCE — QuickMed Express Urgent Care (Alder Plaza)
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Saved to CMS by D. Whitfield. Oldest first.
+
+------------------------------------------------------------
+FAX TRANSMISSION REPORT
+Date/time: 09/30/2026 15:41
+To: QuickMed Express Urgent Care — Alder Plaza, fax (216) 555-0410
+Pages: 4 (cover sheet, records and billing request, HIPAA authorization)
+RESULT: NO ANSWER — NOT SENT
+
+------------------------------------------------------------
+EMAIL — sent 10/01/2026 09:05 am
+From: Dana Whitfield <dwhitfield@calderwynn.example>
+To: records@quickmed-alderplaza.example
+Subject: Records and billing request — Robert J. Kim, DOB 06/03/1994, DOS 09/13/2026
+Attachments: Request letter.pdf, HIPAA authorization.pdf
+
+Please provide complete records and an itemized bill for the above patient's visit on 09/13/2026. Authorization attached.
+
+------------------------------------------------------------
+DELIVERY STATUS NOTIFICATION — 10/01/2026 09:06 am
+Delivery has failed to these recipients: records@quickmed-alderplaza.example
+Reason: Recipient address rejected — mailbox unavailable.
+
+------------------------------------------------------------
+HEALTHLINE RECORDS CUSTODIANS, INC.
+
+October 20, 2026
+
+Dana Whitfield
+Calder & Wynn Injury Law
+
+Re: Records of QuickMed Express Urgent Care — Alder Plaza
+    Patient: Robert J. Kim
+
+Dear Ms. Whitfield:
+
+Thank you for your email of 10/14/2026. QuickMed Express Urgent Care — Alder Plaza ceased operations on 09/30/2026. Healthline Records Custodians is the designated custodian of its patient records.
+
+To obtain records, please submit Healthline Form HR-12 with a HIPAA-compliant authorization and prepayment of the $25.00 retrieval fee. Requests are processed within 15 business days of receipt of a complete request.
+
+Healthline does not hold billing records. Itemized billing statements must be requested from QuickMed's former billing service, Apex Medical Billing, (888) 555-0123.
+
+Sincerely,
+Records Release Department
+Healthline Records Custodians, Inc.

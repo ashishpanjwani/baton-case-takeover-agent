@@ -1,0 +1,15 @@
+RECORDS & BILLS REQUEST LOG — Thompson, Aisha (CW-2025-0911)
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+
+Maintained by: D. Whitfield
+Requests sent 03/02/2026, after the client was released from care on 02/17/2026. Each request enclosed the HIPAA authorization signed 09/05/2025.
+
+Provider | Requested | Method | Requested items | Response
+Mercy Coast Hospital — HIM | 03/02/2026 | Fax | Certified ED records + itemized bill | Records and bill received 03/20/2026
+Coastal Emergency Physicians — Billing | 03/02/2026 | Mail | Itemized bill | Bill received 03/27/2026
+Grant Street Family Medicine | 03/02/2026 | Fax | Records + itemized bill | Records and bill received 03/16/2026
+Coastline Physical Therapy | 03/02/2026 | Email | Records + itemized bill | Records and bill received 04/03/2026
+Harbor Imaging Associates | 03/02/2026 | Fax | MRI report + itemized bill | Report and bill received 03/18/2026
+Bayview Orthopedics | 03/02/2026 | Fax | Records + itemized bill | Records and bill received 04/10/2026
+
+All requests complete. No outstanding records or bills as of 04/10/2026.

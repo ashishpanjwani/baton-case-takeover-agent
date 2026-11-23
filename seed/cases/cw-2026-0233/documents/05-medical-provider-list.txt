@@ -1,0 +1,17 @@
+MEDICAL PROVIDER LIST — Kim, Robert (CW-2026-0233)
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+
+Maintained by: D. Whitfield
+Last updated: 10/16/2026
+
+1. QuickMed Express Urgent Care — Alder Plaza
+   Type: Urgent care (wound care, tetanus, antibiotics)
+   Dates of service: 09/13/2026
+   Records: Requested 09/30/2026
+   Bills: Requested 09/30/2026
+
+2. Cascade Plastic Surgery (Dr. Nina Feld)
+   Type: Plastic surgery consult (scarring, left forearm)
+   Dates of service: 10/08/2026
+   Records: Received 10/16/2026
+   Bills: Not yet requested

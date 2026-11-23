@@ -1,0 +1,18 @@
+MOTOR CARRIER REGISTRATION LOOKUP — printout
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Printed 09/24/2026 by D. Whitfield. Fictional reproduction of a public carrier registration record.
+
+USDOT number: 3398012
+Legal name: Ridgeline Freight LLC
+Operating status: Authorized for property
+Physical address: 88 Quarry Road, Unit B, Brookfield
+Mailing address: 88 Quarry Road, Unit B, Brookfield
+Phone: (330) 555-0175
+Power units: 14    Drivers: 16
+Address last updated: 06/02/2026
+
+Insurance on file (bodily injury and property damage)
+Insurer: Ironbridge Casualty Company (fictional)
+Policy no.: IBC-TR-554091
+Coverage on file: $750,000
+Effective: 03/01/2026    Cancellation: none on file

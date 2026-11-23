@@ -1,0 +1,97 @@
+EMAIL EXPORT — Matter CW-2026-0187 (selected correspondence)
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+
+=== Message 1 ===
+From: Tom Bellamy <tbellamy@granitemutual.example>
+To: Dana Whitfield <dwhitfield@calderwynn.example>
+Date: 03/12/2026 10:14 AM
+Subject: RE: Letter of Representation — Insured: Kevin Marsh / Claimant: Sarah Johnson
+
+Ms. Whitfield,
+
+We acknowledge receipt of your letter of representation. This loss has been assigned claim number GM-26-0448812. Our liability investigation is underway, and we will contact you once a determination has been made. Please direct all correspondence to my attention.
+
+Tom Bellamy
+Senior Bodily Injury Adjuster, Granite Mutual Insurance Co.
+
+=== Message 2 ===
+From: Janet Kwan <jkwan@lakeshoreauto.example>
+To: Dana Whitfield <dwhitfield@calderwynn.example>
+Date: 03/16/2026 2:31 PM
+Subject: Claim LS-7731-26 — Sarah Johnson — Medical Payments coverage
+
+Dana,
+
+Thank you for your letter. I can confirm that policy LAK-883016 includes Medical Payments coverage of $5,000 per person. Please submit itemized bills with the attached MedPay application when available.
+
+Janet Kwan
+Claims Representative, Lakeshore Auto Insurance
+
+=== Message 3 ===
+From: Janet Kwan <jkwan@lakeshoreauto.example>
+To: Dana Whitfield <dwhitfield@calderwynn.example>
+Date: 06/18/2026 11:05 AM
+Subject: RE: MedPay application — Claim LS-7731-26
+
+Dana,
+
+MedPay payments have been issued: $4,262.00 to St. Brendan Regional Medical Center (check no. 0081472) and $738.00 to Harborview Fire Rescue (check no. 0081473). This exhausts the $5,000.00 Medical Payments limit on this claim. No further MedPay benefits are available.
+
+Janet Kwan
+
+=== Message 4 ===
+From: Dana Whitfield <dwhitfield@calderwynn.example>
+To: Tom Bellamy <tbellamy@granitemutual.example>
+Date: 07/01/2026 3:02 PM
+Subject: Policy limits request — Claim GM-26-0448812
+Attachment: Johnson_Limits_Authorization.pdf
+
+Mr. Bellamy,
+
+Per our call on 06/24, we formally request disclosure of all bodily injury liability limits applicable to your insured, Kevin Marsh, for the 03/04/2026 collision. The signed authorization from our client is attached.
+
+Dana Whitfield
+Case Manager, Calder & Wynn Injury Law
+
+=== Message 5 ===
+From: Tom Bellamy <tbellamy@granitemutual.example>
+To: Dana Whitfield <dwhitfield@calderwynn.example>
+Date: 08/19/2026 9:47 AM
+Subject: RE: Policy limits request — Claim GM-26-0448812
+
+Ms. Whitfield,
+
+Following up on your July 1 request. The policy limits request has been forwarded to our underwriting department and we will respond in writing once it has been reviewed.
+
+Separately, please note that our liability investigation remains open. We are still attempting to obtain a recorded statement from our insured, and I will update you when that is complete.
+
+Tom Bellamy
+
+=== Message 6 ===
+From: Dana Whitfield <dwhitfield@calderwynn.example>
+To: roi@harborview-ortho.example
+Cc: billing@harborview-ortho.example
+Date: 09/10/2026 4:18 PM
+Subject: Records follow-up — Sarah Johnson, DOB 06/14/1987
+
+Hello,
+
+Following up on our 05/12/2026 request. Your 06/01/2026 letter stated that the 04/29/2026 office note would be released once finalized. Please send that note and any records for visits after 05/12/2026.
+
+Billing office: please send an itemized statement for all dates of service from 03/18/2026 to present. The patient's HIPAA authorization is attached.
+
+Dana Whitfield
+Case Manager, Calder & Wynn Injury Law
+
+=== Message 7 ===
+From: Dana Whitfield <dwhitfield@calderwynn.example>
+To: billing@northgatespine.example
+Date: 09/15/2026 10:40 AM
+Subject: Itemized billing request — Sarah Johnson
+
+Hello,
+
+Following up on our request of 05/05/2026. We have not received an itemized billing statement for Ms. Johnson's chiropractic treatment (dates of service beginning 03/10/2026). Please send an itemized statement showing all charges, payments and adjustments.
+
+Dana Whitfield
+Case Manager, Calder & Wynn Injury Law

@@ -1,0 +1,13 @@
+CMS TASK HISTORY EXPORT — Matter CW-2026-0198 — Whitaker, James
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Exported 11/02/2026
+
+T-0198-01 | Order police report | Assigned: D. Whitfield | Created 08/27/2026 | Due 09/03/2026 | Status: Completed | Completed 09/02/2026
+T-0198-02 | Send evidence preservation letter — Ridgeline Freight | Assigned: D. Whitfield | Created 08/27/2026 | Due 08/28/2026 | Status: Completed | Completed 08/28/2026
+T-0198-03 | Letters of representation — Ridgeline Freight, Summit Logistics | Assigned: D. Whitfield | Created 08/27/2026 | Due 09/01/2026 | Status: Completed | Completed 08/31/2026
+T-0198-04 | Obtain van dashcam footage — Harbor Produce | Assigned: D. Whitfield | Created 08/27/2026 | Due 09/15/2026 | Status: Open | Completed —
+T-0198-05 | Witness statement — Hector Ruiz | Assigned: D. Whitfield | Created 09/02/2026 | Due 09/16/2026 | Status: Completed | Completed 09/10/2026
+T-0198-06 | Request ED records — St. Brendan | Assigned: D. Whitfield | Created 09/08/2026 | Due 09/22/2026 | Status: Completed | Completed 09/15/2026
+T-0198-07 | Request records — Riverside Physical Therapy | Assigned: D. Whitfield | Created 10/01/2026 | Due 10/22/2026 | Status: Open | Completed —
+T-0198-08 | Update workers' comp lien amount | Assigned: D. Whitfield | Created 10/07/2026 | Due 11/13/2026 | Status: Open | Completed —
+T-0198-09 | Monthly client check-in | Assigned: D. Whitfield | Recurring | Last completed 09/29/2026 | Status: Active

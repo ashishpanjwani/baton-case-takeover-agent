@@ -1,0 +1,18 @@
+CMS TASK HISTORY EXPORT — Matter CW-2025-0911 — Thompson, Aisha
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Exported 11/02/2026
+
+T-0911-01 | Send letters of representation (Pinecrest, Summit) | Assigned: D. Whitfield | Created 09/05/2025 | Due 09/08/2025 | Status: Completed | Completed 09/08/2025
+T-0911-02 | Order police report — Harborview PD | Assigned: D. Whitfield | Created 09/05/2025 | Due 09/19/2025 | Status: Completed | Completed 09/24/2025
+T-0911-03 | Confirm MedPay with Summit | Assigned: D. Whitfield | Created 09/08/2025 | Due 09/22/2025 | Status: Completed | Completed 09/19/2025
+T-0911-04 | Request BI policy limits — Pinecrest | Assigned: D. Whitfield | Created 11/10/2025 | Due 11/24/2025 | Status: Completed | Completed 12/08/2025
+T-0911-10 | Request records & bills — Mercy Coast Hospital | Assigned: D. Whitfield | Created 02/19/2026 | Due 03/02/2026 | Status: Completed | Completed 03/20/2026
+T-0911-11 | Request bill — Coastal Emergency Physicians | Assigned: D. Whitfield | Created 02/19/2026 | Due 03/02/2026 | Status: Completed | Completed 03/27/2026
+T-0911-12 | Request records & bills — Grant Street Family Medicine | Assigned: D. Whitfield | Created 02/19/2026 | Due 03/02/2026 | Status: Completed | Completed 03/16/2026
+T-0911-13 | Request records & bills — Coastline Physical Therapy | Assigned: D. Whitfield | Created 02/19/2026 | Due 03/02/2026 | Status: Completed | Completed 04/03/2026
+T-0911-14 | Request report & bill — Harbor Imaging Associates | Assigned: D. Whitfield | Created 02/19/2026 | Due 03/02/2026 | Status: Completed | Completed 03/18/2026
+T-0911-15 | Request records & bills — Bayview Orthopedics | Assigned: D. Whitfield | Created 02/19/2026 | Due 03/02/2026 | Status: Completed | Completed 04/10/2026
+T-0911-16 | Obtain employer wage verification — Brightsmile Dental | Assigned: D. Whitfield | Created 02/19/2026 | Due 03/16/2026 | Status: Completed | Completed 04/02/2026
+T-0911-20 | Monthly client check-in | Assigned: D. Whitfield | Recurring | Last completed 09/26/2026 | Status: Active
+T-0911-31 | Draft demand package for attorney review | Assigned: D. Whitfield | Created 09/24/2026 | Due 10/30/2026 | Status: Open | Completed —
+T-0911-32 | Obtain final lien amount — Meridian Recovery (MRS-88214) | Assigned: D. Whitfield | Created 09/24/2026 | Due 10/15/2026 | Status: Open | Completed —

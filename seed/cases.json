@@ -1,0 +1,111 @@
+{
+  "_note": "All clients, firms, providers and insurers in this file are fictional. A case's documents come from seed/cases/<id>/case.json (if present) plus anything uploaded in the app.",
+  "firm": "Calder & Wynn Injury Law (fictional)",
+  "reassignedFrom": "Dana Whitfield",
+  "cases": [
+    {
+      "id": "cw-2026-0187",
+      "clientName": "Sarah Johnson",
+      "reference": "CW-2026-0187",
+      "caseType": "Motor vehicle accident (rear-end collision)",
+      "stage": "Pre-litigation — records & bills collection",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Marcus Hale",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-09-15",
+      "lastUpdateBasis": "Last firm-initiated CMS note",
+      "openCmsTasks": 5
+    },
+    {
+      "id": "cw-2025-0911",
+      "clientName": "Aisha Thompson",
+      "reference": "CW-2025-0911",
+      "caseType": "Motor vehicle accident (intersection)",
+      "stage": "Demand in preparation",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Priya Natarajan",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-09-28",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": 2
+    },
+    {
+      "id": "cw-2026-0233",
+      "clientName": "Robert Kim",
+      "reference": "CW-2026-0233",
+      "caseType": "Dog bite",
+      "stage": "Intake complete",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Marcus Hale",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-10-20",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": 4
+    },
+    {
+      "id": "cw-2026-0142",
+      "clientName": "Marcus Delgado",
+      "reference": "CW-2026-0142",
+      "caseType": "Premises liability (slip and fall)",
+      "stage": "Treatment ongoing",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Priya Natarajan",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-10-02",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": null
+    },
+    {
+      "id": "cw-2026-0251",
+      "clientName": "Elena Petrova",
+      "reference": "CW-2026-0251",
+      "caseType": "Pedestrian struck in crosswalk",
+      "stage": "Treatment ongoing",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Marcus Hale",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-10-12",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": null
+    },
+    {
+      "id": "cw-2026-0198",
+      "clientName": "James Whitaker",
+      "reference": "CW-2026-0198",
+      "caseType": "Commercial truck collision",
+      "stage": "Pre-litigation — liability investigation",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Priya Natarajan",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-10-07",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": 3
+    },
+    {
+      "id": "cw-2026-0266",
+      "clientName": "Maria Gonzalez",
+      "reference": "CW-2026-0266",
+      "caseType": "Rideshare passenger injury",
+      "stage": "Intake complete",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Marcus Hale",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-10-24",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": null
+    },
+    {
+      "id": "cw-2025-0874",
+      "clientName": "Daniel Osei",
+      "reference": "CW-2025-0874",
+      "caseType": "Trip and fall (municipal sidewalk)",
+      "stage": "Demand sent — awaiting response",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Priya Natarajan",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-09-30",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": null
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+CMS TASK HISTORY EXPORT — Matter CW-2026-0233 — Kim, Robert
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Exported 11/02/2026
+
+T-0233-01 | Order animal control report — Harborview Animal Services | Assigned: D. Whitfield | Created 09/17/2026 | Due 09/24/2026 | Status: Completed | Completed 09/29/2026
+T-0233-02 | Request records & bills — QuickMed Express Urgent Care | Assigned: D. Whitfield | Created 09/17/2026 | Due 09/30/2026 | Status: Completed | Completed 09/30/2026
+T-0233-03 | Send letter to dog owner (T. Banks) requesting insurance information | Assigned: D. Whitfield | Created 09/17/2026 | Due 10/01/2026 | Status: Completed | Completed 10/01/2026
+T-0233-04 | Wage verification — Driftwood Coffee Co. | Assigned: D. Whitfield | Created 09/30/2026 | Due 10/16/2026 | Status: Completed | Completed 10/10/2026
+T-0233-05 | Request records — Cascade Plastic Surgery | Assigned: D. Whitfield | Created 10/09/2026 | Due 10/23/2026 | Status: Completed | Completed 10/16/2026
+T-0233-06 | Obtain injury and gate photos from client | Assigned: D. Whitfield | Created 09/17/2026 | Due 09/30/2026 | Status: Open | Completed —
+T-0233-07 | Follow up with T. Banks re insurance information | Assigned: D. Whitfield | Created 10/07/2026 | Due 10/19/2026 | Status: Open | Completed —
+T-0233-08 | Request bill — Cascade Plastic Surgery | Assigned: D. Whitfield | Created 10/16/2026 | Due 10/23/2026 | Status: Open | Completed —
+T-0233-09 | Submit Healthline Form HR-12 + $25 for QuickMed records | Assigned: D. Whitfield | Created 10/20/2026 | Due 10/30/2026 | Status: Open | Completed —
+T-0233-10 | Monthly client check-in | Assigned: D. Whitfield | Recurring | Last completed 09/26/2026 | Status: Active

@@ -1,0 +1,35 @@
+MEDICAL PROVIDER LIST — Johnson, Sarah (CW-2026-0187)
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+
+Maintained by: D. Whitfield
+Last updated: 06/10/2026
+
+1. Harborview Fire Rescue (Medic 7)
+   Type: Ambulance transport
+   Dates of service: 03/04/2026
+   Records: N/A
+   Bills: Received 04/30/2026
+
+2. St. Brendan Regional Medical Center
+   Type: Emergency department
+   Dates of service: 03/04/2026
+   Records: Received 04/28/2026
+   Bills: Received 04/28/2026
+
+3. Northgate Spine & Chiropractic (Dr. Alan Pierce, DC)
+   Type: Chiropractic
+   Dates of service: 03/10/2026 – ongoing
+   Records: Received 06/10/2026
+   Bills: Received 06/10/2026
+
+4. Harborview Orthopedic Associates (Dr. Renee Calloway)
+   Type: Orthopedics (left shoulder)
+   Dates of service: 03/18/2026 – ongoing
+   Records: Partial — received 06/03/2026
+   Bills: Requested 05/12/2026
+
+5. ClearView Imaging Center
+   Type: MRI, left shoulder
+   Dates of service: 04/02/2026
+   Records: Not yet requested
+   Bills: Not yet requested
