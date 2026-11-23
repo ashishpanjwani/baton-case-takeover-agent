@@ -109,32 +109,6 @@ Click any citation and the document opens at that page, with the words highlight
 
 ---
 
-## Try it
-
-```bash
-npm install
-npm run dev            # http://localhost:3000
-npm run dev:awake      # same, but keeps a Mac awake so a long investigation isn't cut off by sleep
-```
-
-Without an API key the app runs in **demo mode**. It shows a prepared example report for the Sarah Johnson case, labelled "Demo mode · prepared example · no AI used" wherever it appears. To run real investigations, add a key and restart:
-
-```bash
-cp .env.example .env.local
-# set ANTHROPIC_API_KEY=...   (in .env.local, not .env.example: Next.js does not read .env.example)
-```
-
-A walk through the app:
-
-1. **Cases** lists fifteen reassigned cases, most urgent first. Ten have case files loaded; five are waiting for documents. Each row has one button for what to do next: **View report** for a case already investigated, **Open to investigate** for one ready to run, and **Add documents** for an empty one.
-2. **Open a case** to see its file. Click any document to read it, or use **+ Add documents** to upload PDFs or text files (several at once). Investigate stays disabled until a case has documents.
-3. **Investigate case** shows the agent working live: what it is checking and why, and each document it reads, search it makes and item it records, with the time remaining.
-4. **Open report** shows the report described above. Click any citation to see the source page. The trail at the top (**All cases / client / Takeover report**) leads back to the case list or the case.
-5. In the **Recovery plan**, approve or dismiss steps, edit drafts, and open **How to carry this out**. Decisions are only recorded. Nothing is sent.
-6. **Connections** (top bar) explains how each manual step would be automated.
-
----
-
 ## How the investigation runs
 
 The investigation is run by an **AI agent**. Like an experienced case manager on their first day with a file, it decides for itself what to read, what to check and which leads to follow. Code doesn't choose its steps. Code does set the rules it can't get around: every quote is checked, every page must be read, and nothing leaves the firm.
@@ -194,37 +168,59 @@ The same trail is kept with the report, under **"How this report was investigate
 
 ### Under the hood
 
-**The loop.** The agent is a manual tool-use loop on the Anthropic Messages API, with adaptive thinking and medium effort by default. Each round:
-1. The model thinks, writes one sentence for the live feed, and asks for one or more tools. It can batch independent calls, such as reading five documents at once.
-2. The app checks each tool request against that tool's schema, runs it, and sends the results back. A request that fails the check is not run; the model gets an error explaining why.
-3. The model decides its next move from the results.
+The agent works in **rounds**:
 
-The loop ends when the report is accepted or the round limit is reached. Edge cases are handled explicitly:
-- a reply that stops without calling a tool gets a nudge to continue;
-- a tool call cut off by the output limit is never run;
-- when 8 rounds remain, every reply tells the model to wrap up and submit;
-- after 4 refused submissions the report is accepted anyway, and the final check strips anything unsupported.
+```
+ ┌─────────────────────────── one round ───────────────────────────┐
+ │  MODEL   thinks  →  writes one line for the feed  →  asks for    │
+ │          one or more tools (e.g. "read these 5 documents")       │
+ │                              │                                   │
+ │                              ▼                                   │
+ │  APP     checks each request  →  runs the tool  →  sends back    │
+ │          plain feedback ("quote 2 NOT FOUND in doc-07")          │
+ └──────────────────────────────────────────────────────────────────┘
+        repeats until the report is accepted, or 60 rounds pass
+```
 
-**What the model starts with.** A system prompt (its role, how to work, the reasoning rules, the ranking rules) and an opening message with the case details, today's date and **the list of documents: ids, titles, categories, page counts, and which pages are OCR text**. It does *not* get the documents themselves. It sees a document only when it chooses to open it, which is why "every page has been read" is enforced in code rather than assumed.
+| Part | How it works |
+|---|---|
+| **What the model starts with** | The case details, today's date and a **list** of the documents: titles, page counts, which pages are scans. Not the text itself: it opens each document when it chooses to. |
+| **Where the report lives** | In a draft held by the app. Each "record" call adds or replaces one item, checked on arrival. The app assigns the ids (F1, A1…). |
+| **Feedback** | Short and specific, so the model can fix itself: a quote not found, a category that doesn't hold, or the list of problems blocking submission. |
+| **Quote check** | Exact match after ignoring differences in case, spacing, quote marks and dashes. The page number comes from where the words were found, never from the model. The same check runs on record, on submit and in the final check. |
+| **Category rule** | "Confirmed incomplete" needs a quote that itself states the gap ("not yet requested", "never sent"). Otherwise it is downgraded, and the report says so. |
+| **Edge cases** | No tool call: nudged to continue. A tool call cut off mid-way: never run. 8 rounds left: told to wrap up. 4 refused submissions: accepted, and the final check removes anything unsupported. |
+| **Resuming** | The conversation and draft are saved after every round, so an interrupted run continues where it stopped. Closing the browser doesn't stop a run. |
+| **Cost** | The conversation is cached between rounds, which is about 10× cheaper. Default model: Claude Opus. Claude Haiku costs a few cents a run. Cost is logged, never shown in the app. |
+| **Documents** | PDFs are read page by page. Pages with almost no text are treated as scans and read by OCR (Tesseract) on the local machine. |
+| **Fallback** | The model sits behind a provider interface. `INVESTIGATION_METHOD=workflow` runs the earlier fixed-step version instead. |
+| **Stack** | Next.js 16, React 19, TypeScript, Tailwind, Zod 4, the Anthropic SDK, pdf.js, tesseract.js. The tests use a scripted fake agent and a stubbed API, so they need no key and cost nothing. |
 
-**Where the report lives.** The model never writes the report as one block of text. The app holds a **draft report**, and each "record" call adds or replaces one item in it: a finding, timeline event, completed or outstanding item, or recovery step. The app assigns the ids (F1, E1, C1, O1, A1). Every item has a typed schema, the same one the report uses, so a malformed item is rejected at the boundary.
+---
 
-**The feedback the model gets.** Every tool reply is plain, specific text, and that is what lets the agent correct itself. For example:
-- *"Recorded F3. quote 1: found in doc-09 page 1; quote 2: NOT FOUND in doc-07. Use check_quote or search_case_file to find the exact wording, then revise this item"*;
-- *"Warning: as recorded this would be shown as potentially incomplete. Either cite the statement of the gap, or change the category"*;
-- a refused submission lists every problem: unread pages, missing quotes, high-priority findings with no step.
+## Try it
 
-**How a quote is checked.** The same matcher runs when an item is recorded, at submission, and in the final check. Both the quote and the page text are normalised for case, whitespace, curly quotes and dash variants, and nothing else. The quote must then appear verbatim. A "…" may join fragments, which must appear in order on the same page. Very short fragments are rejected so trivial words can't match. The page number comes from where the match was found, never from the model. The category rule then applies: a "confirmed incomplete" finding must state that a document records the gap, and at least one verified quote must contain wording like "not yet requested", "had not been finalized", "never" or "outstanding". Otherwise it is downgraded, and the report shows the correction.
+```bash
+npm install
+npm run dev            # http://localhost:3000
+npm run dev:awake      # same, but keeps a Mac awake so a long investigation isn't cut off by sleep
+```
 
-**Resuming and caching.** After every round, the conversation, the draft report and the trail are saved, keyed by a hash of the model settings and the opening prompt. If a run dies (network drop, laptop asleep), the next run with the same inputs continues from the last finished round. The whole conversation is re-sent every round with automatic prompt caching, so earlier rounds are billed at about a tenth of the input price. A closed browser doesn't stop a run either: the server finishes it and saves the report.
+Without an API key the app runs in **demo mode**. It shows a prepared example report for the Sarah Johnson case, labelled "Demo mode · prepared example · no AI used" wherever it appears. To run real investigations, add a key and restart:
 
-**Documents.** PDFs are extracted page by page. A page with under 25 characters of text is treated as a scan: it is rendered and read by Tesseract on the local machine, so no document goes to a third-party OCR service. OCR pages are labelled to the model and in the document viewer.
+```bash
+cp .env.example .env.local
+# set ANTHROPIC_API_KEY=...   (in .env.local, not .env.example: Next.js does not read .env.example)
+```
 
-**Around the agent.** The model sits behind a small provider interface, so the engine doesn't depend on one vendor. The earlier fixed workflow (notes on each document, then the report in two structured-output calls) is still available as a fallback. Each run is stored separately from the source documents, along with its trail and verification summary. Setting `INVESTIGATION_METHOD=workflow` switches to the fixed workflow, so the two can be compared on the same case.
+A walk through the app:
 
-**Models.** One model runs the whole investigation. The default is Claude Opus; Claude Haiku is a few cents a run and useful for iterating. Usage and cost are logged per run, never shown in the app.
-
-**Stack.** Next.js 16 (App Router), React 19, TypeScript, Tailwind, Zod 4, the Anthropic TypeScript SDK, pdf.js and tesseract.js. The automated tests drive the real tools with a scripted fake agent, and run the real agent loop against a stubbed API, so no test needs a key or spends money.
+1. **Cases** lists fifteen reassigned cases, most urgent first. Ten have case files loaded; five are waiting for documents. Each row has one button for what to do next: **View report** for a case already investigated, **Open to investigate** for one ready to run, and **Add documents** for an empty one.
+2. **Open a case** to see its file. Click any document to read it, or use **+ Add documents** to upload PDFs or text files (several at once). Investigate stays disabled until a case has documents.
+3. **Investigate case** shows the agent working live: what it is checking and why, and each document it reads, search it makes and item it records, with the time remaining.
+4. **Open report** shows the report described above. Click any citation to see the source page. The trail at the top (**All cases / client / Takeover report**) leads back to the case list or the case.
+5. In the **Recovery plan**, approve or dismiss steps, edit drafts, and open **How to carry this out**. Decisions are only recorded. Nothing is sent.
+6. **Connections** (top bar) explains how each manual step would be automated.
 
 ## Design decisions
 
