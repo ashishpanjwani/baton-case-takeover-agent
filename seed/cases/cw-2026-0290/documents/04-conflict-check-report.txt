@@ -1,0 +1,14 @@
+CONFLICT CHECK REPORT — printout
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+
+Run: 10/22/2026 by R. Ames (front desk), for new matter CW-2026-0290 (Brooks, Hannah)
+Names searched: Hannah Brooks; Derek Voss; Coastal Car Rental; Keel Rental Claims
+
+Results
+- Hannah Brooks: no match.
+- Derek Voss: 1 potential match — CURRENT CLIENT. Matter CW-2025-0712, Voss, Derek (motor vehicle, rear-end collision 2025). Status: Open. Responsible attorney: Marcus Hale.
+- Coastal Car Rental: no match.
+- Keel Rental Claims: no match.
+
+Status: Potential conflict. Pending review by responsible attorney. Do not proceed on the new matter until cleared.
+Sent to: D. Whitfield (case manager), for routing to the responsible attorney.

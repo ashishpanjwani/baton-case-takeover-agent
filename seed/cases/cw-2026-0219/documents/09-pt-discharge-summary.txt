@@ -1,0 +1,13 @@
+HARBOR PHYSICAL THERAPY — DISCHARGE SUMMARY (fictional)
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+
+Patient: Samuel O. Adeyemi    DOB: 09/09/1985
+Referred by: Victor Chen, MD (right calcaneus ORIF; L1 compression fracture)
+Dates: 06/01/2026 to 08/12/2026 (last attended visit)
+Discharge date: 09/05/2026
+
+Progress: Walking with a cane at last visit. Right ankle range of motion improving but still limited. Lifting restrictions remain.
+
+Attendance: 18 visits attended. No-shows on 08/17, 08/24 and 08/31/2026. Unable to reach the patient at (216) 555-0147 (number not in service as of 08/26/2026).
+
+Reason for discharge: Discharged for non-attendance. Goals not met. Patient may return with a new referral.

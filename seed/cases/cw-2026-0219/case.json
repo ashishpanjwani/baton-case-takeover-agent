@@ -1,0 +1,23 @@
+{
+  "id": "cw-2026-0219",
+  "firm": "Calder & Wynn Injury Law (fictional)",
+  "assignedAttorney": "Priya Natarajan",
+  "incomingCaseManager": "You",
+  "reassignedOn": "2026-10-31",
+  "documents": [
+    { "id": "doc-01", "filename": "01-intake-notes.txt", "title": "Initial intake notes", "category": "Intake", "documentDate": "2026-05-01" },
+    { "id": "doc-02", "filename": "02-sterling-site-incident-report.pdf", "title": "Sterling Build Group site incident report", "category": "Liability", "documentDate": "2026-04-23" },
+    { "id": "doc-03", "filename": "03-client-information-sheet.txt", "title": "Client information sheet", "category": "Client", "documentDate": "2026-05-01" },
+    { "id": "doc-04", "filename": "04-osha-inspection-summary-scan.pdf", "title": "OSHA inspection summary (scanned)", "category": "Liability", "documentDate": "2026-07-17" },
+    { "id": "doc-05", "filename": "05-sterling-insurer-letter.txt", "title": "Brightwater Casualty letter (Sterling's insurer)", "category": "Insurance", "documentDate": "2026-06-30" },
+    { "id": "doc-06", "filename": "06-ironline-scaffold-letter.txt", "title": "Ironline Scaffold Co. letter", "category": "Correspondence", "documentDate": "2026-06-12" },
+    { "id": "doc-07", "filename": "07-workers-comp-correspondence.txt", "title": "Workers' compensation correspondence", "category": "Workers' comp", "documentDate": "2026-09-15" },
+    { "id": "doc-08", "filename": "08-medical-provider-list.txt", "title": "Medical provider list", "category": "Medical", "documentDate": "2026-09-12" },
+    { "id": "doc-09", "filename": "09-pt-discharge-summary.txt", "title": "Harbor Physical Therapy discharge summary", "category": "Medical records", "documentDate": "2026-09-05" },
+    { "id": "doc-10", "filename": "10-client-communication-log.txt", "title": "Client communication log", "category": "Client", "documentDate": "2026-10-02" },
+    { "id": "doc-11", "filename": "11-cms-case-notes.txt", "title": "CMS case notes", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-12", "filename": "12-cms-task-history.txt", "title": "CMS task history export", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-13", "filename": "13-cms-document-index.txt", "title": "CMS document index", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-14", "filename": "14-reassignment-memo.txt", "title": "Reassignment memo", "category": "Internal", "documentDate": "2026-10-31" }
+  ]
+}

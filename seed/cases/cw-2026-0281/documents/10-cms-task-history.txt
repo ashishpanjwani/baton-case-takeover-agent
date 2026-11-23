@@ -1,0 +1,11 @@
+CMS TASK HISTORY EXPORT — Matter CW-2026-0281 — Liu, Grace
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Exported 11/02/2026
+
+T-0281-01 | Letter of representation + video preservation — FreshWay | Assigned: D. Whitfield | Created 08/21/2026 | Due 08/24/2026 | Status: Completed | Completed 08/21/2026
+T-0281-02 | Request records & bills — Harbor Children's Hospital | Assigned: D. Whitfield | Created 08/21/2026 | Due 09/30/2026 | Status: Completed | Completed 09/02/2026
+T-0281-03 | Request records & bills — Bayside Pediatric Ortho | Assigned: D. Whitfield | Created 08/21/2026 | Due 09/30/2026 | Status: Completed | Completed 09/12/2026
+T-0281-04 | Track medical payments (Crescent) | Assigned: D. Whitfield | Created 09/18/2026 | Due 10/16/2026 | Status: Completed | Completed 09/18/2026 | Note: check pending
+T-0281-05 | Written request for copy of store video (FW-RM-8812) | Assigned: D. Whitfield | Created 09/20/2026 | Due 10/02/2026 | Status: Open | Completed —
+T-0281-06 | Ask attorney re med pay check deposited by parent; call Helen back | Assigned: D. Whitfield | Created 09/25/2026 | Due 09/29/2026 | Status: Open | Completed —
+T-0281-07 | Monthly check-in with parent | Assigned: D. Whitfield | Recurring | Last completed 10/22/2026 | Status: Active

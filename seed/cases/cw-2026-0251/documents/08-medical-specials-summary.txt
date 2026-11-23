@@ -1,0 +1,13 @@
+MEDICAL SPECIALS SUMMARY — Petrova, Elena (CW-2026-0251)
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Prepared by D. Whitfield from the CMS billing entries. Exported 10/12/2026.
+
+Provider | Dates of service | Amount billed
+Harbor General ED | 07/09/2026 | $6,240.00
+Harbor General Hospital — Emergency | 07/09/2026 | $6,240.00
+Harbor General Hospital — Inpatient | 07/09/2026–07/13/2026 | $31,875.00
+Summit Orthopedics | 07/27/2026–09/21/2026 | $1,960.00
+Bayfront Physical Therapy | 08/10/2026–09/30/2026 | $2,415.00
+
+Total billed to date: $48,730.00
+Note: Treatment ongoing. Total will change.

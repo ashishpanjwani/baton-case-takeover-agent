@@ -1,12 +1,16 @@
 /**
- * Investigation engine. A fixed, code-controlled pipeline:
+ * Investigation engine.
  *
- *   1. extract    – read every document and extract text (per page for PDFs)
- *   2. analyze    – AI mode: per-document structured extraction
- *   3. synthesize – AI mode: report part 1 (overview, timeline, findings)
- *   4. plan       – AI mode: report part 2 (work status, recovery plan)
- *                   Demo mode (3+4): load the precomputed report for the seeded case
- *   5. verify     – deterministic check of every citation against the raw text
+ * Agent method (default in AI mode):
+ *   1. extract     – read every document and extract text (per page for PDFs, OCR for scans)
+ *   2. investigate – the agent runs the investigation with tools (see investigator.ts)
+ *   3. verify      – deterministic check of every citation against the raw text
+ *
+ * Workflow method (INVESTIGATION_METHOD=workflow; the earlier fixed pipeline):
+ *   1. extract, 2. analyze (per document), 3. synthesize (report part 1),
+ *   4. plan (report part 2), 5. verify
+ *
+ * Demo mode loads the precomputed report for the seeded case, then verifies it.
  *
  * Progress events are emitted as each real step starts and finishes.
  *
@@ -21,9 +25,11 @@ import { LLMError, type CallUsage, type ModelRole } from "../llm/provider";
 import { DocumentAnalysisSchema, ReportPart1Schema, ReportPart2Schema, TakeoverReportSchema, type DocumentAnalysis, type ReportPart1, type TakeoverReport } from "../schemas";
 import { appendSpend, clearCheckpoint, getCase, readCheckpoint, saveRun, sha256, writeCheckpoint, type CaseDetail } from "../store";
 import { configKeys, estimateSteps } from "./eta";
+import { emptyState, investigatorPrompt, investigatorSystem, investigatorTools, stateToReport, type InvestigatorState, type TrailEntry } from "./investigator";
 import { getDemoReport } from "./demo-report";
 import { ROLE, REASONING_RULES, caseContext, documentAnalysisPrompt, synthesisPrompt, type PromptDocument } from "./prompts";
-import { summariseUsage, type InvestigationEvent, type InvestigationRun, type RunDocument } from "./types";
+import { summariseUsage, type InvestigationEvent, type InvestigationMethod, type InvestigationRun, type RunDocument } from "./types";
+import type { AgentTranscript } from "../llm/provider";
 import { verifyReport } from "./verify";
 
 export interface InvestigateOptions {
@@ -32,6 +38,24 @@ export interface InvestigateOptions {
   onEvent?: (e: InvestigationEvent) => void;
   /** Override "today" (tests). */
   today?: string;
+  /** Defaults to INVESTIGATION_METHOD (agent unless set to "workflow"). */
+  method?: InvestigationMethod;
+}
+
+/**
+ * How AI investigations run. "agent" unless INVESTIGATION_METHOD=workflow,
+ * or the provider cannot run an agent.
+ */
+export function investigationMethod(provider: LLMProvider | null, env: NodeJS.ProcessEnv = process.env): InvestigationMethod {
+  const v = (env.INVESTIGATION_METHOD || "agent").trim().toLowerCase();
+  if (v !== "agent" && v !== "workflow") throw new Error('INVESTIGATION_METHOD must be "agent" or "workflow"');
+  return v === "agent" && provider?.runAgentLoop ? "agent" : "workflow";
+}
+
+/** Upper limit on the agent's model turns: bounds the time and cost of a run. */
+export function agentMaxTurns(env: NodeJS.ProcessEnv = process.env) {
+  const n = Number(env.AGENT_MAX_TURNS);
+  return Number.isFinite(n) && n >= 5 ? Math.floor(n) : 60;
 }
 
 const now = () => new Date().toISOString();
@@ -44,6 +68,8 @@ interface Checkpoint {
   savedAt: string;
   analyses: Record<string, DocumentAnalysis>;
   part1: { key: string; output: ReportPart1 } | null;
+  /** The agent's conversation and working report, saved after every turn. */
+  agent?: { key: string; state: InvestigatorState; transcript: AgentTranscript; trail: TrailEntry[] } | null;
 }
 
 /** Mutable state shared with the failure handler, so a failed run's usage is still recorded. */
@@ -106,8 +132,9 @@ async function run(
   state.runId = runId;
   const startedAt = now();
   const notices: string[] = [];
-  const estimates = provider ? await estimateSteps(c.id, provider, c.documents.length) : null;
-  emit({ type: "run_started", at: startedAt, runId, mode, models: provider?.models ?? null, documentCount: c.documents.length, estimates });
+  const method: InvestigationMethod = opts.method && provider?.runAgentLoop ? opts.method : investigationMethod(provider);
+  const estimates = provider ? await estimateSteps(c.id, provider, c.documents.length, method) : null;
+  emit({ type: "run_started", at: startedAt, runId, mode, method: provider ? method : undefined, models: provider?.models ?? null, documentCount: c.documents.length, estimates });
 
   // 1. Extract
   emit({ type: "stage", at: now(), stage: "extract", status: "started", detail: `${c.documents.length} documents` });
@@ -147,6 +174,8 @@ async function run(
 
   let report: TakeoverReport;
   let analyses: DocumentAnalysis[] | null = null;
+  let trail: TrailEntry[] | undefined;
+  let agentInfo: InvestigationRun["agent"];
   let analysedIds: Set<string>;
   const calls = state.calls;
 
@@ -158,12 +187,60 @@ async function run(
       sha256(JSON.stringify([provider.configKey?.(role) ?? provider.models[role], system, prompt]));
     // Reuse finished steps from an interrupted run (matched by exact inputs).
     const saved = await readCheckpoint<Checkpoint>(c.id);
-    const cp: Checkpoint = { savedAt: now(), analyses: saved?.analyses ?? {}, part1: saved?.part1 ?? null };
+    const cp: Checkpoint = { savedAt: now(), analyses: saved?.analyses ?? {}, part1: saved?.part1 ?? null, agent: saved?.agent ?? null };
     const persist = () => (saving = saving.then(() => writeCheckpoint(c.id, { ...cp, savedAt: now() })).catch(() => {}));
     let reused = 0;
-
-    // 2. Per-document analysis
     const ctx = caseContext(c);
+
+    if (method === "agent") {
+      // 2. The agent investigates.
+      const system = investigatorSystem();
+      const prompt = investigatorPrompt({ caseContext: ctx, today: opts.today ?? now().slice(0, 10), documents: promptDocs });
+      const key = keyOf("reasoning", system, prompt);
+      const resume = cp.agent?.key === key ? cp.agent : null;
+      const st: InvestigatorState = resume ? resume.state : emptyState();
+      const steps: TrailEntry[] = resume ? [...resume.trail] : [];
+      const maxTurns = agentMaxTurns();
+      let turn = resume?.transcript.turn ?? 0;
+      const log = (entry: TrailEntry) => {
+        steps.push(entry);
+        emit({ type: "agent", at: now(), entry, turn, maxTurns });
+      };
+      emit({ type: "stage", at: now(), stage: "investigate", status: "started", detail: resume ? "Continuing the interrupted investigation" : undefined });
+      if (resume) log({ kind: "thought", text: "Continuing from where the interrupted run stopped." });
+      const r = await provider.runAgentLoop!({
+        role: "reasoning", label: "investigation", system, prompt,
+        tools: investigatorTools(promptDocs, st, log),
+        effort: "medium", maxTokensPerTurn: 32000, maxTurns,
+        isDone: () => st.accepted,
+        nudge: "The report has not been submitted. Continue the investigation using the tools, and call submit_report when the report is complete.",
+        turnNote: (left) => (left <= 8 ? `${left} step${left === 1 ? "" : "s"} left. Record what you have established and call submit_report.` : null),
+        onText: (t) => log({ kind: "thought", text: t.length > 500 ? `${t.slice(0, 497)}…` : t }),
+        resume: resume?.transcript ?? null,
+        onTurn: (t) => {
+          turn = t.turn;
+          cp.agent = { key, state: st, transcript: t, trail: steps };
+          persist();
+        },
+      });
+      calls.push(...r.usage);
+      if (r.stopped === "turn_limit") {
+        log({ kind: "submit", ok: false, text: "Stopped at the limit on how much work one investigation may do; the report holds what had been established" });
+        notices.push("The agent reached the limit on how much work one investigation may do before it finished. The report contains what it had established by then, and may be missing items.");
+      }
+      report = TakeoverReportSchema.parse(stateToReport(st));
+      trail = steps;
+      agentInfo = { turns: r.turns, maxTurns, stopped: r.stopped };
+      emit({ type: "stage", at: now(), stage: "investigate", status: "completed",
+        detail: `${st.findings.length} findings, ${st.recoveryPlan.length} next steps` });
+      await saving;
+      await clearCheckpoint(c.id);
+      // A document counts as analysed if the agent read any of it.
+      analysedIds = new Set(promptDocs.filter((d) => (st.pagesRead[d.id]?.length ?? 0) > 0).map((d) => d.id));
+      const unread = promptDocs.filter((d) => !analysedIds.has(d.id));
+      if (unread.length) notices.push(`The agent did not read ${unread.map((d) => `"${d.title}"`).join(", ")}.`);
+    } else {
+    // 2. Per-document analysis
     const analysisSystem = `${ROLE}\n\n${REASONING_RULES}`;
     emit({ type: "stage", at: now(), stage: "analyze", status: "started" });
     // All documents at once (up to 16): the stage then takes as long as the slowest document.
@@ -227,6 +304,7 @@ async function run(
     await saving;
     await clearCheckpoint(c.id);
     analysedIds = new Set(promptDocs.map((d) => d.id));
+    }
   } else {
     emit({ type: "stage", at: now(), stage: "analyze", status: "skipped", detail: "Demo mode: no AI is used" });
     emit({ type: "stage", at: now(), stage: "synthesize", status: "completed", detail: "Prepared example analysis loaded" });
@@ -269,6 +347,7 @@ async function run(
     usage: provider ? summariseUsage(calls, provider.models) : null,
     startedAt, completedAt, documents, documentAnalyses: analyses,
     report: verified.report, verification: v, notices, log,
+    method: provider ? method : undefined, trail, agent: agentInfo,
   };
   await saveRun(result);
   return result;

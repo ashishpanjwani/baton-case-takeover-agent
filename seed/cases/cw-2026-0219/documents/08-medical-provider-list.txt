@@ -1,0 +1,13 @@
+MEDICAL PROVIDER LIST — Adeyemi, Samuel (CW-2026-0219)
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Maintained by: D. Whitfield. Last updated 09/12/2026.
+
+1. Harbor General Hospital — ED, surgery and inpatient, 04/22/2026–04/29/2026
+   Records: Received 06/18/2026. Bills: Received 06/18/2026 (paid by workers' comp).
+
+2. Lakeside Orthopedic Group — Dr. Victor Chen, from 05/11/2026
+   Records: Received through 08/03/2026. Bills: Received through 08/03/2026.
+
+3. Harbor Physical Therapy — from 06/01/2026
+   Records: Received 09/12/2026 (includes discharge summary). Bills: Received 09/12/2026.
+   Status: Discharged 09/05/2026.

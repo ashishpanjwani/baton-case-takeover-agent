@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { CaseWorkspace } from "@/components/case-workspace";
 import { formatDate } from "@/components/ui";
 import { getDemoReport } from "@/lib/agent/demo-report";
-import { estimateSteps } from "@/lib/agent/eta";
+import { investigationMethod } from "@/lib/agent/engine";
+import { estimateSteps, totalEstimate } from "@/lib/agent/eta";
 import { getProvider } from "@/lib/llm";
 import { getCase, latestRun } from "@/lib/store";
 
@@ -15,8 +16,9 @@ export default async function CasePage({ params }: { params: Promise<{ id: strin
   if (!c) notFound();
   const run = await latestRun(id);
   const provider = getProvider();
-  const est = provider ? await estimateSteps(id, provider, c.documents.length) : null;
-  const typicalMs = est ? est.analyze + est.synthesize + est.plan : null;
+  const method = investigationMethod(provider);
+  const est = provider ? await estimateSteps(id, provider, c.documents.length, method) : null;
+  const typicalMs = est ? totalEstimate(est) : null;
 
   return (
     <div>
@@ -53,7 +55,7 @@ export default async function CasePage({ params }: { params: Promise<{ id: strin
       <CaseWorkspace
         caseId={id}
         documents={c.documents}
-        mode={provider ? { kind: "ai", typicalMs: typicalMs! } : { kind: "demo", available: getDemoReport(id) !== null }}
+        mode={provider ? { kind: "ai", typicalMs: typicalMs!, method } : { kind: "demo", available: getDemoReport(id) !== null }}
         lastRun={run ? { id: run.id, completedAt: run.completedAt, mode: run.mode, findings: run.report.findings.length } : null}
       />
     </div>

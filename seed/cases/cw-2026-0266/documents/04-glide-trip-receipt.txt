@@ -1,0 +1,15 @@
+GLIDE TRIP RECEIPT — transcribed from the client's screenshot
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Screenshot received by email 09/25/2026. Transcribed by P. Nair. Original image saved in the CMS.
+
+Glide (fictional rideshare service)
+Thanks for riding, Maria
+
+Trip date: Sep 19, 2026
+Driver: Owen P.   Vehicle: Gray Toyota Camry
+Pickup: Tidewater Hotel, 40 Harbor Avenue — 9:31 PM
+Drop-off: 560 Fulton Street — 9:52 PM
+Trip status: Completed
+
+Fare: $14.20
+Note in app: "Trip ended by driver"

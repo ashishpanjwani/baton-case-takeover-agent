@@ -1,0 +1,24 @@
+{
+  "id": "cw-2025-0874",
+  "firm": "Calder & Wynn Injury Law (fictional)",
+  "assignedAttorney": "Priya Natarajan",
+  "incomingCaseManager": "You",
+  "reassignedOn": "2026-10-31",
+  "documents": [
+    { "id": "doc-01", "filename": "01-intake-notes.txt", "title": "Initial intake notes", "category": "Intake", "documentDate": "2025-05-20" },
+    { "id": "doc-02", "filename": "02-site-photos-log.txt", "title": "Site photographs log", "category": "Liability", "documentDate": "2025-05-23" },
+    { "id": "doc-03", "filename": "03-client-information-sheet.txt", "title": "Client information sheet", "category": "Client", "documentDate": "2025-05-22" },
+    { "id": "doc-04", "filename": "04-notice-of-claim.txt", "title": "Notice of claim — City of Harborview", "category": "Liability", "documentDate": "2025-06-20" },
+    { "id": "doc-05", "filename": "05-city-inspection-letter-scan.pdf", "title": "City sidewalk inspection letter (scanned)", "category": "Correspondence", "documentDate": "2025-08-26" },
+    { "id": "doc-06", "filename": "06-city-correspondence.txt", "title": "City correspondence (acknowledgment, statement under oath)", "category": "Correspondence", "documentDate": "2025-07-10" },
+    { "id": "doc-07", "filename": "07-records-and-bills-log.txt", "title": "Records & bills request log", "category": "Medical", "documentDate": "2026-03-05" },
+    { "id": "doc-08", "filename": "08-harbor-pt-itemized-bill.pdf", "title": "Harbor Physical Therapy itemized statement", "category": "Bills", "documentDate": "2026-03-03" },
+    { "id": "doc-09", "filename": "09-medicare-conditional-payment-letter.txt", "title": "Medicare conditional payment letter", "category": "Liens", "documentDate": "2026-08-05" },
+    { "id": "doc-10", "filename": "10-demand-letter.txt", "title": "Settlement demand to the City (excerpt)", "category": "Demand", "documentDate": "2026-09-12" },
+    { "id": "doc-11", "filename": "11-client-communication-log.txt", "title": "Client communication log", "category": "Client", "documentDate": "2026-10-05" },
+    { "id": "doc-12", "filename": "12-cms-case-notes.txt", "title": "CMS case notes", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-13", "filename": "13-cms-task-history.txt", "title": "CMS task history export", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-14", "filename": "14-cms-document-index.txt", "title": "CMS document index", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-15", "filename": "15-reassignment-memo.txt", "title": "Reassignment memo", "category": "Internal", "documentDate": "2026-10-31" }
+  ]
+}

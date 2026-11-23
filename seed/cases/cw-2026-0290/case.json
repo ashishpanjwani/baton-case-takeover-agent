@@ -1,0 +1,22 @@
+{
+  "id": "cw-2026-0290",
+  "firm": "Calder & Wynn Injury Law (fictional)",
+  "assignedAttorney": "Marcus Hale",
+  "incomingCaseManager": "You",
+  "reassignedOn": "2026-10-31",
+  "documents": [
+    { "id": "doc-01", "filename": "01-intake-notes.txt", "title": "Initial intake notes", "category": "Intake", "documentDate": "2026-10-06" },
+    { "id": "doc-02", "filename": "02-police-report.pdf", "title": "Police crash report HPD-26-130455", "category": "Liability", "documentDate": "2026-10-03" },
+    { "id": "doc-03", "filename": "03-client-information-sheet.txt", "title": "Client information sheet", "category": "Client", "documentDate": "2026-10-06" },
+    { "id": "doc-04", "filename": "04-conflict-check-report.txt", "title": "Conflict check report", "category": "Engagement", "documentDate": "2026-10-22" },
+    { "id": "doc-05", "filename": "05-keel-rental-claims-letter.txt", "title": "Keel Rental Claims letter (Coastal Car Rental)", "category": "Insurance", "documentDate": "2026-10-20" },
+    { "id": "doc-06", "filename": "06-harbor-general-ed-record.pdf", "title": "Harbor General Hospital ED record", "category": "Medical records", "documentDate": "2026-10-03" },
+    { "id": "doc-07", "filename": "07-medical-provider-list.txt", "title": "Medical provider list", "category": "Medical", "documentDate": "2026-10-23" },
+    { "id": "doc-08", "filename": "08-property-damage-receipts.txt", "title": "Property damage receipts and estimate", "category": "Damages", "documentDate": "2026-10-23" },
+    { "id": "doc-09", "filename": "09-client-communication-log.txt", "title": "Client communication log", "category": "Client", "documentDate": "2026-10-23" },
+    { "id": "doc-10", "filename": "10-cms-case-notes.txt", "title": "CMS case notes", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-11", "filename": "11-cms-task-history.txt", "title": "CMS task history export", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-12", "filename": "12-cms-document-index.txt", "title": "CMS document index", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-13", "filename": "13-reassignment-memo.txt", "title": "Reassignment memo", "category": "Internal", "documentDate": "2026-10-31" }
+  ]
+}

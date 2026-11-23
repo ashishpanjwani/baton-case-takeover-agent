@@ -34,9 +34,11 @@ export interface CaseSummary {
   reassignedOn: string | null;
   /** Seed documents plus uploads. A case with none can still be opened and filled by upload. */
   documentCount: number;
+  /** When the most recent upload was added, or null if none. */
+  latestUploadAt: string | null;
 }
 
-type CaseListEntry = Omit<CaseSummary, "documentCount">;
+type CaseListEntry = Omit<CaseSummary, "documentCount" | "latestUploadAt">;
 
 export interface CaseDocument {
   id: string;
@@ -96,8 +98,10 @@ export async function listCases(): Promise<CaseSummary[]> {
   const { cases } = await caseList();
   return Promise.all(cases.map(async (c) => {
     const manifest = await seedManifest(c.id);
-    const documentCount = (manifest?.documents.length ?? 0) + (await listUploads(c.id)).length;
-    return { ...c, documentCount };
+    const uploads = await listUploads(c.id);
+    const documentCount = (manifest?.documents.length ?? 0) + uploads.length;
+    const latestUploadAt = uploads.map((u) => u.addedAt).filter((a): a is string => !!a).sort().at(-1) ?? null;
+    return { ...c, documentCount, latestUploadAt };
   }));
 }
 
@@ -129,6 +133,7 @@ export async function getCase(caseId: string): Promise<CaseDetail | null> {
     assignedAttorney: manifest?.assignedAttorney ?? summary.assignedAttorney ?? null,
     reassignedOn: manifest?.reassignedOn ?? summary.reassignedOn ?? null,
     documentCount: documents.length,
+    latestUploadAt: documents.map((d) => d.addedAt).filter((a): a is string => !!a).sort().at(-1) ?? null,
     documents,
   };
 }

@@ -418,6 +418,8 @@ export function AuditSection({ run }: { run: ReportRun }) {
         </div>
       </div>
 
+      {run.trail && run.trail.length > 0 && <InvestigationTrail trail={run.trail} />}
+
       <div className="mt-4 rounded-lg border border-line bg-surface">
         <div className="px-4 py-2.5">
           <h3 className="text-[14px] font-semibold">Documents reviewed</h3>
@@ -444,5 +446,29 @@ function Stat({ label, value, warn }: { label: string; value: number; warn?: boo
       <div className={cx("text-[18px] font-semibold tabular", warn && "text-amber")}>{value}</div>
       <div className="text-[11.5px] text-ink-3">{label}</div>
     </div>
+  );
+}
+
+/** Everything the agent did, in order: what it read, searched, checked and recorded. */
+function InvestigationTrail({ trail }: { trail: NonNullable<ReportRun["trail"]> }) {
+  const count = (k: string) => trail.filter((t) => t.kind === k).length;
+  return (
+    <details className="mt-4 rounded-lg border border-line bg-surface">
+      <summary className="cursor-pointer px-4 py-2.5 text-[14px] font-semibold">
+        How this report was investigated
+        <span className="ml-2 text-[12.5px] font-normal text-ink-3">
+          {count("read")} reads · {count("search")} searches · {count("check")} quote checks · {count("record")} items recorded
+        </span>
+      </summary>
+      <ol className="space-y-1 border-t border-line px-4 py-3">
+        {trail.map((t, i) =>
+          t.kind === "thought" ? (
+            <li key={i} className="mt-2 border-l-2 border-accent/40 pl-2 text-[12.5px] text-ink first:mt-0">{t.text}</li>
+          ) : (
+            <li key={i} className={cx("pl-2.5 text-[12px]", t.ok === false ? "text-amber" : "text-ink-2")}>{t.text}</li>
+          ),
+        )}
+      </ol>
+    </details>
   );
 }

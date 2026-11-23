@@ -1,0 +1,21 @@
+{
+  "id": "cw-2026-0281",
+  "firm": "Calder & Wynn Injury Law (fictional)",
+  "assignedAttorney": "Priya Natarajan",
+  "incomingCaseManager": "You",
+  "reassignedOn": "2026-10-31",
+  "documents": [
+    { "id": "doc-01", "filename": "01-intake-notes.txt", "title": "Initial intake notes", "category": "Intake", "documentDate": "2026-08-20" },
+    { "id": "doc-02", "filename": "02-freshway-incident-report.pdf", "title": "FreshWay Market customer incident report", "category": "Liability", "documentDate": "2026-08-08" },
+    { "id": "doc-03", "filename": "03-client-information-sheet.txt", "title": "Client information sheet", "category": "Client", "documentDate": "2026-08-20" },
+    { "id": "doc-04", "filename": "04-crescent-claims-letters.txt", "title": "Crescent Claims letters (FreshWay's claims administrator)", "category": "Insurance", "documentDate": "2026-09-18" },
+    { "id": "doc-05", "filename": "05-childrens-hospital-letter.txt", "title": "Harbor Children's Hospital letter re records request", "category": "Correspondence", "documentDate": "2026-09-11" },
+    { "id": "doc-06", "filename": "06-bayside-pediatric-ortho-records.pdf", "title": "Bayside Pediatric Orthopedics records", "category": "Medical records", "documentDate": "2026-09-09" },
+    { "id": "doc-07", "filename": "07-medical-provider-list.txt", "title": "Medical provider list", "category": "Medical", "documentDate": "2026-09-14" },
+    { "id": "doc-08", "filename": "08-client-communication-log.txt", "title": "Client communication log", "category": "Client", "documentDate": "2026-10-22" },
+    { "id": "doc-09", "filename": "09-cms-case-notes.txt", "title": "CMS case notes", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-10", "filename": "10-cms-task-history.txt", "title": "CMS task history export", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-11", "filename": "11-cms-document-index.txt", "title": "CMS document index", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-12", "filename": "12-reassignment-memo.txt", "title": "Reassignment memo", "category": "Internal", "documentDate": "2026-10-31" }
+  ]
+}

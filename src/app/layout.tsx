@@ -3,7 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Case Takeover Agent",
+  title: "Baton · Case takeover agent",
   description: "Investigates reassigned personal injury cases and prepares an evidence-backed takeover report.",
 };
 
@@ -14,8 +14,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <header className="border-b border-line bg-surface">
           <div className="mx-auto flex h-14 max-w-[1320px] items-center justify-between px-4 sm:px-6">
             <Link href="/" className="flex items-center gap-2.5">
-              <span className="grid h-7 w-7 place-items-center rounded-md bg-accent text-[13px] font-semibold text-white">CT</span>
-              <span className="text-[15px] font-semibold tracking-tight">Case Takeover Agent</span>
+              <span className="grid h-7 w-7 place-items-center rounded-md bg-accent text-[14px] font-semibold text-white">B</span>
+              <span className="flex flex-col leading-tight">
+                <span className="text-[15px] font-semibold tracking-tight">Baton</span>
+                <span className="text-[11px] text-ink-3">Case takeover agent</span>
+              </span>
             </Link>
             <div className="flex items-center gap-5 text-[13px]">
               <Link href="/connections" className="font-medium text-ink-2 hover:text-accent">Connections</Link>

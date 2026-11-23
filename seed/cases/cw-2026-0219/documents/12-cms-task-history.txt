@@ -1,0 +1,11 @@
+CMS TASK HISTORY EXPORT — Matter CW-2026-0219 — Adeyemi, Samuel
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Exported 11/02/2026
+
+T-0219-01 | Identify scaffold company | Assigned: D. Whitfield | Created 05/04/2026 | Due 05/18/2026 | Status: Completed | Completed 05/20/2026 | Note: Ironline Scaffold Co.
+T-0219-02 | Letters of representation — GC and scaffold company | Assigned: D. Whitfield | Created 05/04/2026 | Due 05/22/2026 | Status: Completed | Completed 05/20/2026
+T-0219-03 | Obtain site incident report and OSHA report | Assigned: D. Whitfield | Created 05/04/2026 | Due 07/31/2026 | Status: Completed | Completed 07/20/2026
+T-0219-04 | Request records & bills — all providers | Assigned: D. Whitfield | Created 05/04/2026 | Due 09/30/2026 | Status: Completed | Completed 09/12/2026
+T-0219-05 | Locate client (new address and phone) | Assigned: D. Whitfield | Created 10/02/2026 | Due 10/16/2026 | Status: Open | Completed —
+T-0219-06 | Contact WC counsel (Alvarez & Kim) re lien and coordination | Assigned: D. Whitfield | Created 09/15/2026 | Due 10/15/2026 | Status: Open | Completed —
+T-0219-07 | Monthly client check-in | Assigned: D. Whitfield | Recurring | Last completed 08/14/2026 | Status: Active

@@ -1,0 +1,10 @@
+MEDICAL PROVIDER LIST — Brooks, Hannah (CW-2026-0290)
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Maintained by: D. Whitfield. Last updated 10/23/2026.
+
+1. Harbor General Hospital — Emergency Department, 10/03/2026
+   Records: Received 10/23/2026. Bill: Requested 10/14/2026, not received.
+
+2. Summit Orthopedics — Dr. Leah Moran, from 10/12/2026
+   Records: Not requested. Bills: Not requested.
+   Status: Treating. Re-check in 4 weeks.

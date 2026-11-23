@@ -39,7 +39,7 @@ export function renderDocument(d: PromptDocument): string {
   return `<document id="${d.id}" title="${escapeAttr(d.title)}" category="${escapeAttr(d.category)}" type="${d.kind}" pages="${d.pages.length}">\n${body}\n</document>`;
 }
 
-function pageMarker(d: PromptDocument, n: number, text: string) {
+export function pageMarker(d: PromptDocument, n: number, text: string) {
   if (!text.trim()) return `[Page ${n} — no text could be extracted from this page]`;
   if (d.ocrPages?.includes(n)) return `[Page ${n} — text from OCR of a scanned image; may contain recognition errors]`;
   return `[Page ${n}]`;
@@ -62,7 +62,7 @@ Extract:
 Every "quote" must be copied verbatim from the document above. Set docId to "${d.id}". Do not draw conclusions across documents; that happens later.`;
 }
 
-const SECTION_GUIDE = {
+export const SECTION_GUIDE = {
   overview: `- overview: case type, current stage, a short operational summary, key events, known providers (with what the file shows about their records and bills), insurance information, and the last meaningful activity.`,
   timeline: `- timeline: a chronological reconstruction of the case's operational history. One entry per meaningful event, each with evidence. Link timeline entries to finding ids where relevant.`,
   findings: `- findings: issues that need the incoming case manager's attention, each in exactly one category:

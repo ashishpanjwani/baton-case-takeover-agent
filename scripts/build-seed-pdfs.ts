@@ -531,11 +531,317 @@ async function jamesWhitaker() {
   ]);
 }
 
+async function elenaPetrova() {
+  await build("02-police-report.pdf", "Harborview Police Department — Traffic Crash Report HPD-26-098117", [
+    [
+      H("HARBORVIEW POLICE DEPARTMENT — TRAFFIC CRASH REPORT"),
+      "Report no.: HPD-26-098117",
+      "Date/time of crash: 07/09/2026, 18:21",
+      "Location: Harbor Avenue at 5th Street, marked crosswalk, Harborview",
+      "Reporting officer: Ofc. D. Mensah, badge 1904",
+      "Crash type: Pedestrian struck. Hit-and-run.",
+      "",
+      B("PEDESTRIAN"),
+      "Elena V. Petrova, DOB 04/02/1961, 18 Pier View Terrace, Apt 3. Transported by Harborview Fire Rescue to Harbor General Hospital.",
+      "Pedestrian signal: WALK, per two witnesses.",
+      "",
+      B("UNIT 1 (left scene)"),
+      "Silver four-door sedan, make and model unknown. Partial plate reported by witness: 7KX. Turning left from 5th Street onto Harbor Avenue.",
+      "",
+      B("WITNESSES"),
+      "Carla Reyes, (216) 555-0102. Saw the sedan turn left and strike the pedestrian in the crosswalk. Gave partial plate 7KX.",
+      "Paul Whitcombe, (216) 555-0119. Heard the impact; saw a silver sedan leave north on Harbor Avenue.",
+    ],
+    [
+      B("NARRATIVE"),
+      "Unit 1 turned left from 5th Street and struck the pedestrian, who was crossing Harbor Avenue in the crosswalk on a WALK signal. Unit 1 did not stop and left north on Harbor Avenue.",
+      "",
+      B("FOLLOW-UP"),
+      "Business camera at Corner Market (northeast corner) may show the intersection. Footage request to be made by the investigating detective.",
+      "Case referred to Traffic Investigations, Det. A. Ruiz.",
+    ],
+    [
+      H("SUPPLEMENTAL REPORT — 10/02/2026"),
+      "Report no.: HPD-26-098117 (supplement 1)",
+      "Author: Det. A. Ruiz, Traffic Investigations",
+      "",
+      "Partial plate 7KX checked against silver sedans registered in the county: 41 possible vehicles. None linked to the collision.",
+      "Corner Market camera: footage request made 08/19/2026. The business advised that its system keeps footage for 30 days; footage from 07/09/2026 is no longer available.",
+      "No suspect has been identified. Investigation suspended pending new leads.",
+    ],
+  ]);
+
+  await build("06-harbor-general-records.pdf", "Harbor General Hospital — Records Excerpt — Petrova, Elena", [
+    [
+      H("HARBOR GENERAL HOSPITAL — EMERGENCY DEPARTMENT"),
+      "Patient: Elena V. Petrova    DOB: 04/02/1961",
+      "Arrival: 07/09/2026 18:52 by ambulance",
+      "Interpreter: Bulgarian phone interpreter used.",
+      "",
+      B("Assessment"),
+      "Pedestrian struck by a car. Right lower leg deformity. Lacerations to the right hand. Right hip contusion.",
+      B("Imaging"),
+      "CT right knee: displaced fracture of the right tibial plateau. X-ray right hand: no fracture.",
+      B("Disposition"),
+      "Admitted to orthopedic surgery.",
+    ],
+    [
+      H("HARBOR GENERAL HOSPITAL — OPERATIVE AND DISCHARGE SUMMARY"),
+      "Surgery: 07/10/2026. Open reduction and internal fixation, right tibial plateau, with plate and screws. Surgeon: Leah Moran, MD.",
+      "Discharged: 07/13/2026 to home with walker. Non-weight-bearing on the right leg for 6 weeks.",
+      "Follow-up: Summit Orthopedics, Dr. Moran, in 2 weeks. Physical therapy after 4 weeks.",
+      "Note: Hardware removal may be considered in 12 to 18 months if symptomatic.",
+    ],
+  ]);
+}
+
+async function mariaGonzalez() {
+  await build("02-police-report.pdf", "Harborview Police Department — Traffic Crash Report HPD-26-121907", [
+    [
+      H("HARBORVIEW POLICE DEPARTMENT — TRAFFIC CRASH REPORT"),
+      "Report no.: HPD-26-121907",
+      "Date/time of crash: 09/19/2026, 21:46",
+      "Location: Bay Road at Fulton Street, Harborview",
+      "Reporting officer: Ofc. R. Castellanos, badge 2251",
+      "",
+      B("UNIT 1"),
+      "Driver: Owen Pratt. 2022 Toyota Camry, gray. Rideshare sticker (Glide) displayed.",
+      "Insurance shown at scene: Driver's personal policy, Pioneer Auto, policy PA-6610932.",
+      "Passenger: Maria L. Gonzalez, rear right seat. Complained of neck and shoulder pain. Declined transport.",
+      "Direction: Northbound on Bay Road, green signal.",
+      "",
+      B("UNIT 2"),
+      "Driver: Lena Fisk. 2019 Honda CR-V. Insurance: Northpoint Auto, policy NPA-4471805.",
+      "Direction: Eastbound on Fulton Street.",
+    ],
+    [
+      B("NARRATIVE"),
+      "Unit 2 entered the intersection against a red signal and struck the right side of Unit 1. Independent witness Gary Holm, (216) 555-0108, confirms Unit 2 had the red signal.",
+      "Unit 1 driver stated he was driving for Glide and had a passenger. He stated he was taking the passenger home.",
+      "",
+      B("CITATIONS"),
+      "Unit 2 driver cited: Failure to obey traffic signal.",
+    ],
+  ]);
+
+  await build("05-cedar-urgent-care-record.pdf", "Cedar Urgent Care — Fulton Plaza — Visit Record", [
+    [
+      H("CEDAR URGENT CARE — FULTON PLAZA"),
+      "Records release: faxed 10/16/2026 in response to request from Calder & Wynn Injury Law.",
+      "",
+      "Patient: Mariela Gonzales",
+      "DOB: 03/02/1991",
+      "Address: 1188 Shore Drive, Harborview",
+      "Date of visit: 09/20/2026    Provider: Anita Rao, NP",
+      "",
+      B("Chief complaint"),
+      "Right ankle pain after twisting it playing soccer yesterday.",
+      B("Exam"),
+      "Swelling over the right lateral ankle. Able to bear weight with pain.",
+      B("Imaging"),
+      "X-ray right ankle: no fracture.",
+      B("Diagnosis"),
+      "Sprain of right ankle.",
+      B("Plan"),
+      "Rest, ice, compression, elevation. Ankle brace. Follow up with primary care if not better in 1 week.",
+    ],
+  ]);
+}
+
+async function danielOsei() {
+  await buildScan("05-city-inspection-letter-scan.pdf", "City inspection letter (scanned)", [
+    [
+      "[FICTIONAL DEMO RECORD - NOT A REAL CLIENT]",
+      "CITY OF HARBORVIEW - DEPARTMENT OF PUBLIC WORKS",
+      "Sidewalk Inspection Unit",
+      "",
+      "08/26/2025",
+      "To: Calder & Wynn Injury Law",
+      "Re: Claim GC-25-0412 - Daniel K. Osei",
+      "",
+      "At the request of the Office of Risk Management,",
+      "the sidewalk in front of 221 Market Street was",
+      "inspected on 08/21/2025.",
+      "",
+      "Result: No defect requiring repair was found at",
+      "this location. All slab joints are within the",
+      "City's 1/2 inch standard.",
+      "",
+      "Inspector: B. Lund, Public Works",
+    ],
+  ]);
+
+  await build("08-harbor-pt-itemized-bill.pdf", "Harbor Physical Therapy — Itemized Statement — Osei, Daniel", [
+    [
+      H("HARBOR PHYSICAL THERAPY — ITEMIZED STATEMENT"),
+      "Patient: Daniel K. Osei    DOB: 03/08/1958",
+      "Dates of service: 06/09/2025 to 12/18/2025",
+      "Statement date: 03/03/2026",
+      "",
+      "06/09/2025  Physical therapy evaluation  $285.00",
+      "06/11/2025–12/16/2025  Therapeutic exercise, 26 units at $65.00  $1,690.00",
+      "06/11/2025–12/16/2025  Manual therapy, 14 units at $65.00  $910.00",
+      "07/14/2025–09/10/2025  Neuromuscular re-education, 5 units at $65.00  $325.00",
+      "09/15/2025  Re-evaluation  $150.00",
+      "12/18/2025  Discharge evaluation  $150.00",
+      "",
+      B("Total charges: $3,510.00"),
+      "Payments (Medicare): $1,402.62    Adjustments: $2,107.38    Balance: $0.00",
+    ],
+  ]);
+}
+
+async function graceLiu() {
+  await build("02-freshway-incident-report.pdf", "FreshWay Market — Customer Incident Report", [
+    [
+      H("FRESHWAY MARKET — CUSTOMER INCIDENT REPORT"),
+      "Store: #114, 400 Bay Road, Harborview",
+      "Report completed by: Tom Becker, Assistant Store Manager",
+      "Date/time of incident: 08/08/2026, 2:15 pm",
+      "",
+      B("CUSTOMER"),
+      "Grace Liu (minor, age 15). With parent Helen Liu, (216) 555-0164.",
+      "",
+      B("LOCATION"),
+      "Aisle 7 (canned goods and condiments), near the end cap.",
+      "",
+      B("DESCRIPTION"),
+      "Customer slipped on liquid from a broken jar on the floor and fell. Customer complained of right ankle pain and said she hit her head. Parent drove customer to the hospital.",
+      "",
+      B("FLOOR CONDITION"),
+      "Broken jar reported to staff at approx. 2:05 pm. Wet floor sign placed: Yes, at approx. 2:05 pm (per employee J. Ortiz).",
+      "Cleanup started: 2:20 pm.",
+      "",
+      B("EVIDENCE"),
+      "Photos taken by T. Becker: 4. CCTV: retained by Risk Management, reference FW-RM-8812.",
+      "Employee witness: J. Ortiz.",
+    ],
+  ]);
+
+  await build("06-bayside-pediatric-ortho-records.pdf", "Bayside Pediatric Orthopedics — Records — Liu, Grace", [
+    [
+      H("BAYSIDE PEDIATRIC ORTHOPEDICS — OFFICE NOTE"),
+      "Patient: Grace M. Liu    DOB: 06/14/2011    Accompanied by: mother",
+      "Date of visit: 08/15/2026    Provider: Owen Park, MD",
+      "",
+      B("History"),
+      "Slip and fall at a grocery store on 08/08/2026. Right ankle injury. Also struck the back of her head; ED head CT negative. Mother reports daily headaches and trouble concentrating since the fall.",
+      B("Assessment"),
+      "Nondisplaced fracture of the right distal fibula. Post-concussive headaches by history.",
+      B("Plan"),
+      "Walking boot for 4 weeks. Re-check 09/09/2026. Recommend follow-up with pediatrician or concussion clinic if headaches persist beyond 4 weeks.",
+    ],
+    [
+      H("BAYSIDE PEDIATRIC ORTHOPEDICS — OFFICE NOTE"),
+      "Date of visit: 09/09/2026    Provider: Owen Park, MD",
+      "",
+      "Fracture healing well. Boot discontinued. Physical therapy ordered for strength and balance, 2 times a week for 6 weeks.",
+      "Mother reports headaches continue several times a week. Advised to see pediatrician or concussion clinic.",
+    ],
+  ]);
+}
+
+async function hannahBrooks() {
+  await build("02-police-report.pdf", "Harborview Police Department — Traffic Crash Report HPD-26-130455", [
+    [
+      H("HARBORVIEW POLICE DEPARTMENT — TRAFFIC CRASH REPORT"),
+      "Report no.: HPD-26-130455",
+      "Date/time: 10/03/2026, 08:11",
+      "Location: Elm Street, northbound bike lane, between 2nd Street and 3rd Street",
+      "Reporting officer: Ofc. T. Albrecht, badge 2312",
+      "",
+      B("UNIT 1 (bicycle)"),
+      "Rider: Hannah R. Brooks, DOB 01/30/1994. Helmet worn. Transported to Harbor General Hospital.",
+      "",
+      B("UNIT 2 (parked vehicle)"),
+      "Driver: Derek Voss. 2025 Ford Explorer, rental. Owner: Coastal Car Rental, rental agreement RA-77120.",
+      "Insurance shown: rental agreement only. Driver states he has no personal auto policy.",
+      "",
+      B("NARRATIVE"),
+      "Unit 2 was parallel parked on Elm Street. The driver opened the driver's door into the bike lane as Unit 1 approached. Unit 1 struck the door and fell into the travel lane. No other vehicle involved.",
+      "",
+      B("CITATION"),
+      "Unit 2 driver cited: Opening vehicle door into moving traffic.",
+    ],
+  ]);
+
+  await build("06-harbor-general-ed-record.pdf", "Harbor General Hospital — ED Record — Brooks, Hannah", [
+    [
+      H("HARBOR GENERAL HOSPITAL — EMERGENCY DEPARTMENT"),
+      "Patient: Hannah R. Brooks    DOB: 01/30/1994",
+      "Arrival: 10/03/2026 08:42 by ambulance",
+      "",
+      B("Assessment"),
+      "Cyclist struck an opened car door. Right shoulder pain and deformity. Abrasions to the right forearm and right hip. Right wrist tender.",
+      B("Imaging"),
+      "X-ray right clavicle: displaced midshaft fracture. X-ray right wrist: no fracture.",
+      B("Treatment"),
+      "Sling. Wound care to abrasions. Pain medication.",
+      B("Disposition"),
+      "Discharged 13:15. Follow up with orthopedics within 1 week; surgery may be considered if displacement persists.",
+    ],
+  ]);
+}
+
+async function samuelAdeyemi() {
+  await build("02-sterling-site-incident-report.pdf", "Sterling Build Group — Site Incident Report — Harbor Point Apartments", [
+    [
+      H("STERLING BUILD GROUP — SITE INCIDENT REPORT"),
+      "Project: Harbor Point Apartments, 1200 Harbor Point Drive, Harborview",
+      "Report by: Nadia Flores, Site Safety Manager    Report date: 04/23/2026",
+      "Date/time of incident: 04/22/2026, approx. 10:40",
+      "",
+      B("INJURED WORKER"),
+      "Samuel Adeyemi, carpenter. Employer: Ridgeway Framing LLC (framing subcontractor).",
+      "",
+      B("DESCRIPTION"),
+      "Worker was on the level 3 scaffold platform, east elevation. The top guardrail on the open side came loose and the worker fell approximately 12 feet to grade. EMS called; worker transported to Harbor General Hospital.",
+      "",
+      B("EQUIPMENT"),
+      "Scaffold erected and maintained by Ironside Scaffolding Inc. (scaffolding subcontractor). Last scaffold inspection tag: 04/20/2026, signed by Ironside competent person.",
+      "",
+      B("WITNESS"),
+      "Luis Ortega, Ridgeway Framing foreman, (216) 555-0152.",
+      "",
+      B("ACTIONS"),
+      "Area closed. Ironside notified to inspect all guardrails on site. OSHA notified 04/22/2026.",
+    ],
+  ]);
+
+  await buildScan("04-osha-inspection-summary-scan.pdf", "OSHA inspection summary (scanned)", [
+    [
+      "[FICTIONAL DEMO RECORD - NOT A REAL CLIENT]",
+      "INSPECTION SUMMARY - public records copy",
+      "Fictional reproduction for demonstration",
+      "",
+      "Site: Harbor Point Apartments, 1200 Harbor Point Dr",
+      "Inspection opened: 04/23/2026",
+      "Reason: Fall injury reported 04/22/2026",
+      "",
+      "Employers inspected:",
+      "1. Ironside Scaffolding Inc. - CITATION ISSUED",
+      "   Guardrail on open side of scaffold platform",
+      "   not secured as required.",
+      "2. Ridgeway Framing LLC - no citation",
+      "3. Sterling Build Group - no citation",
+      "",
+      "Status: Citation contested by employer 1.",
+      "Copy released 07/17/2026.",
+    ],
+  ]);
+}
+
 async function main() {
   if (forCase("cw-2026-0187")) await sarahJohnson();
   if (forCase("cw-2025-0911")) await aishaThompson();
   if (forCase("cw-2026-0233")) await robertKim();
   if (forCase("cw-2026-0198")) await jamesWhitaker();
+  if (forCase("cw-2026-0251")) await elenaPetrova();
+  if (forCase("cw-2026-0266")) await mariaGonzalez();
+  if (forCase("cw-2025-0874")) await danielOsei();
+  if (forCase("cw-2026-0281")) await graceLiu();
+  if (forCase("cw-2026-0290")) await hannahBrooks();
+  if (forCase("cw-2026-0219")) await samuelAdeyemi();
 }
 
 main().catch((e) => {

@@ -66,7 +66,7 @@
       "reassignedOn": "2026-10-31",
       "lastMeaningfulUpdate": "2026-10-12",
       "lastUpdateBasis": "Last CMS note",
-      "openCmsTasks": null
+      "openCmsTasks": 3
     },
     {
       "id": "cw-2026-0198",
@@ -92,7 +92,7 @@
       "reassignedOn": "2026-10-31",
       "lastMeaningfulUpdate": "2026-10-24",
       "lastUpdateBasis": "Last CMS note",
-      "openCmsTasks": null
+      "openCmsTasks": 3
     },
     {
       "id": "cw-2025-0874",
@@ -104,6 +104,97 @@
       "assignedAttorney": "Priya Natarajan",
       "reassignedOn": "2026-10-31",
       "lastMeaningfulUpdate": "2026-09-30",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": 2
+    },
+    {
+      "id": "cw-2026-0274",
+      "clientName": "Tomás Rivera",
+      "reference": "CW-2026-0274",
+      "caseType": "Motorcycle collision",
+      "stage": "Treatment ongoing",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Marcus Hale",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-10-19",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": null
+    },
+    {
+      "id": "cw-2026-0281",
+      "clientName": "Grace Liu",
+      "reference": "CW-2026-0281",
+      "caseType": "Premises liability (grocery store slip)",
+      "stage": "Pre-litigation — records & bills collection",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Priya Natarajan",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-10-22",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": 2
+    },
+    {
+      "id": "cw-2026-0219",
+      "clientName": "Samuel Adeyemi",
+      "reference": "CW-2026-0219",
+      "caseType": "Construction site fall (third-party claim)",
+      "stage": "Pre-litigation — records & bills collection",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Priya Natarajan",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-10-02",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": 2
+    },
+    {
+      "id": "cw-2026-0290",
+      "clientName": "Hannah Brooks",
+      "reference": "CW-2026-0290",
+      "caseType": "Bicycle collision (opened car door)",
+      "stage": "Intake complete",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Marcus Hale",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-10-23",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": 3
+    },
+    {
+      "id": "cw-2026-0297",
+      "clientName": "Kevin Nakamura",
+      "reference": "CW-2026-0297",
+      "caseType": "Bus passenger injury (city transit)",
+      "stage": "Intake complete",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Marcus Hale",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-10-21",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": null
+    },
+    {
+      "id": "cw-2026-0263",
+      "clientName": "Luis Ferreira",
+      "reference": "CW-2026-0263",
+      "caseType": "Product injury (e-scooter battery fire)",
+      "stage": "Pre-litigation — liability investigation",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Priya Natarajan",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-10-14",
+      "lastUpdateBasis": "Last CMS note",
+      "openCmsTasks": null
+    },
+    {
+      "id": "cw-2026-0305",
+      "clientName": "Priscilla Owens",
+      "reference": "CW-2026-0305",
+      "caseType": "Pedestrian struck in parking lot",
+      "stage": "Treatment ongoing",
+      "previousCaseManager": "Dana Whitfield",
+      "assignedAttorney": "Marcus Hale",
+      "reassignedOn": "2026-10-31",
+      "lastMeaningfulUpdate": "2026-10-19",
       "lastUpdateBasis": "Last CMS note",
       "openCmsTasks": null
     }

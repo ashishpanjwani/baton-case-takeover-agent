@@ -1,6 +1,10 @@
 import { MODEL_ROLES, type CallUsage, type ModelRole } from "../llm/provider";
 import type { DocumentAnalysis, TakeoverReport } from "../schemas";
+import type { TrailEntry } from "./investigator";
 import type { VerificationSummary } from "./verify";
+
+/** agent: the AI runs the investigation with tools. workflow: fixed steps (earlier design, kept as a fallback). */
+export type InvestigationMethod = "agent" | "workflow";
 
 export type InvestigationMode = "ai" | "demo";
 
@@ -35,17 +39,23 @@ export interface InvestigationRun {
   verification: VerificationSummary;
   notices: string[];
   log: InvestigationEvent[];
+  /** Absent on runs from before the agent existed (they used the workflow). */
+  method?: InvestigationMethod;
+  /** What the agent did, step by step (agent runs only). */
+  trail?: TrailEntry[];
+  /** Model turns the agent used, and whether it finished or hit the limit (agent runs only). */
+  agent?: { turns: number; maxTurns: number; stopped: "done" | "turn_limit" };
 }
 
 /**
  * The part of a run the report page sends to the browser: what the case manager
  * needs, without models, token usage, cost or the raw event log.
  */
-export type ReportRun = Pick<InvestigationRun, "id" | "mode" | "completedAt" | "documents" | "verification" | "notices" | "report">;
+export type ReportRun = Pick<InvestigationRun, "id" | "mode" | "completedAt" | "documents" | "verification" | "notices" | "report" | "method" | "trail">;
 
 export function toReportRun(run: InvestigationRun): ReportRun {
-  const { id, mode, completedAt, documents, verification, notices, report } = run;
-  return { id, mode, completedAt, documents, verification, notices, report };
+  const { id, mode, completedAt, documents, verification, notices, report, method, trail } = run;
+  return { id, mode, completedAt, documents, verification, notices, report, method, trail };
 }
 
 export interface RunUsage {
@@ -73,15 +83,24 @@ export function summariseUsage(calls: CallUsage[], models: Record<ModelRole, str
   };
 }
 
-/** synthesize = report part 1 (history and findings); plan = report part 2 (work status and recovery plan). */
-export type InvestigationStage = "extract" | "analyze" | "synthesize" | "plan" | "verify";
+/**
+ * Agent runs: extract, investigate, verify.
+ * Workflow runs: extract, analyze, synthesize (report part 1), plan (report part 2), verify.
+ */
+export type InvestigationStage = "extract" | "analyze" | "synthesize" | "plan" | "investigate" | "verify";
+
+/** Expected duration (ms) of each timed step that will run. */
+export type StepEstimates = Partial<Record<"analyze" | "synthesize" | "plan" | "investigate", number>>;
 
 export type InvestigationEvent =
   | { type: "run_started"; at: string; runId: string; mode: InvestigationMode; models: Record<ModelRole, string> | null; documentCount: number;
+      method?: InvestigationMethod;
       /** Expected duration (ms) of each AI step; null in demo mode. */
-      estimates?: { analyze: number; synthesize: number; plan: number } | null }
+      estimates?: StepEstimates | null }
   | { type: "stage"; at: string; stage: InvestigationStage; status: "started" | "completed" | "skipped"; detail?: string }
   | { type: "document"; at: string; stage: "extract" | "analyze"; docId: string; title: string; status: "started" | "completed" | "failed"; detail?: string }
   | { type: "notice"; at: string; message: string }
+  /** Something the agent did, as it happens. */
+  | { type: "agent"; at: string; entry: TrailEntry; turn?: number; maxTurns?: number }
   | { type: "completed"; at: string; runId: string }
   | { type: "failed"; at: string; error: string };

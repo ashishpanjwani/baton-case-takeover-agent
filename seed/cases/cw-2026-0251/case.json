@@ -1,0 +1,23 @@
+{
+  "id": "cw-2026-0251",
+  "firm": "Calder & Wynn Injury Law (fictional)",
+  "assignedAttorney": "Marcus Hale",
+  "incomingCaseManager": "You",
+  "reassignedOn": "2026-10-31",
+  "documents": [
+    { "id": "doc-01", "filename": "01-intake-notes.txt", "title": "Initial intake notes", "category": "Intake", "documentDate": "2026-07-14" },
+    { "id": "doc-02", "filename": "02-police-report.pdf", "title": "Police report HPD-26-098117 (with 10/02 supplement)", "category": "Liability", "documentDate": "2026-10-02" },
+    { "id": "doc-03", "filename": "03-client-information-sheet.txt", "title": "Client information sheet", "category": "Client", "documentDate": "2026-07-14" },
+    { "id": "doc-04", "filename": "04-bayline-um-correspondence.txt", "title": "Bayline Mutual UM claim correspondence", "category": "Insurance", "documentDate": "2026-10-09" },
+    { "id": "doc-05", "filename": "05-proof-of-loss-form.txt", "title": "Proof of Loss form (copy in file)", "category": "Insurance", "documentDate": "2026-08-28" },
+    { "id": "doc-06", "filename": "06-harbor-general-records.pdf", "title": "Harbor General Hospital records excerpt", "category": "Medical records", "documentDate": "2026-07-13" },
+    { "id": "doc-07", "filename": "07-medical-provider-list.txt", "title": "Medical provider list", "category": "Medical", "documentDate": "2026-10-12" },
+    { "id": "doc-08", "filename": "08-medical-specials-summary.txt", "title": "Medical specials summary", "category": "Damages", "documentDate": "2026-10-12" },
+    { "id": "doc-09", "filename": "09-crestline-health-lien.txt", "title": "Crestline Health Plan lien correspondence", "category": "Liens", "documentDate": "2026-09-09" },
+    { "id": "doc-10", "filename": "10-client-communication-log.txt", "title": "Client communication log", "category": "Client", "documentDate": "2026-10-12" },
+    { "id": "doc-11", "filename": "11-cms-case-notes.txt", "title": "CMS case notes", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-12", "filename": "12-cms-task-history.txt", "title": "CMS task history export", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-13", "filename": "13-cms-document-index.txt", "title": "CMS document index", "category": "CMS", "documentDate": "2026-11-02" },
+    { "id": "doc-14", "filename": "14-reassignment-memo.txt", "title": "Reassignment memo", "category": "Internal", "documentDate": "2026-10-31" }
+  ]
+}

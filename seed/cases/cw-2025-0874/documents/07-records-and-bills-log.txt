@@ -1,0 +1,10 @@
+RECORDS & BILLS REQUEST LOG — Osei, Daniel (CW-2025-0874)
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Maintained by D. Whitfield. Client released from care 01/22/2026. Requests sent 02/02/2026.
+
+Provider | Dates of service | Records | Bill (amount)
+Harbor General Hospital — ED and inpatient | 05/14/2025–05/18/2025 | Received 02/20/2026 | Received 02/20/2026 (ED $4,880.00; inpatient $27,640.00)
+Lakeside Orthopedic Group — Dr. Victor Chen | 05/27/2025–01/22/2026 | Received 02/26/2026 | Received 02/26/2026 ($2,210.00)
+Harbor Physical Therapy | 06/09/2025–12/18/2025 | Received 03/05/2026 | Received 03/05/2026 (see itemized bill)
+
+All records and bills received as of 03/05/2026.

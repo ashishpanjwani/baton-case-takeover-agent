@@ -31,7 +31,13 @@ export function ReportView({ caseDetail, run, initialDecisions }: { caseDetail: 
 
   return (
     <EvidenceProvider caseId={caseDetail.id} documents={caseDetail.documents}>
-      <Link href={`/cases/${caseDetail.id}`} className="text-[13px] text-ink-3 hover:text-accent">← Back to case</Link>
+      <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1.5 text-[13px] text-ink-3">
+        <Link href="/" className="font-medium text-ink-2 hover:text-accent">← All cases</Link>
+        <span aria-hidden>/</span>
+        <Link href={`/cases/${caseDetail.id}`} className="hover:text-accent">{caseDetail.clientName}</Link>
+        <span aria-hidden>/</span>
+        <span className="text-ink-2" aria-current="page">Takeover report</span>
+      </nav>
 
       <header className="mt-2 border-b border-line pb-5">
         <div className="text-[12px] font-medium uppercase tracking-wide text-ink-3">Case takeover report</div>

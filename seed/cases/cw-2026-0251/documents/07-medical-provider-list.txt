@@ -1,0 +1,17 @@
+MEDICAL PROVIDER LIST — Petrova, Elena (CW-2026-0251)
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Maintained by: D. Whitfield. Last updated 10/12/2026.
+
+1. Harbor General Hospital — Emergency Department, 07/09/2026
+   Records: Received 08/20/2026. Bill: Received 08/20/2026 ($6,240.00).
+
+2. Harbor General Hospital — Inpatient (surgery 07/10/2026, discharged 07/13/2026)
+   Records: Received 08/20/2026. Bill: Received 08/27/2026 ($31,875.00).
+
+3. Summit Orthopedics — Dr. Leah Moran, follow-up from 07/27/2026
+   Records: Received through 09/21/2026. Bills: Received through 09/21/2026 ($1,960.00).
+   Status: Treating. Next visit 11/16/2026.
+
+4. Bayfront Physical Therapy — from 08/10/2026
+   Records: Received through 09/30/2026. Bills: Received through 09/30/2026 ($2,415.00).
+   Status: Treating, 2 visits a week.

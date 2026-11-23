@@ -54,6 +54,55 @@ export interface LLMProvider {
    */
   configKey?(role: ModelRole): string;
   generateStructured<T>(req: StructuredRequest<T>): Promise<StructuredResult<T>>;
+  /** Runs a tool-using agent until it finishes or runs out of turns. Optional: providers without it use the fixed workflow. */
+  runAgentLoop?(req: AgentLoopRequest): Promise<AgentLoopResult>;
+}
+
+/** A tool the agent can call. Inputs are validated against `input` before `run` is called. */
+export interface AgentTool {
+  name: string;
+  description: string;
+  input: z.ZodType<unknown>;
+  /** Returns the text sent back to the model. `isError` tells the model the call did not succeed. */
+  run(input: unknown): Promise<{ content: string; isError?: boolean }> | { content: string; isError?: boolean };
+}
+
+/** Saved conversation, so an interrupted agent run can continue where it stopped. Opaque to the engine. */
+export interface AgentTranscript {
+  messages: unknown[];
+  turn: number;
+}
+
+export interface AgentLoopRequest {
+  role: ModelRole;
+  system: string;
+  /** The opening instruction. */
+  prompt: string;
+  tools: AgentTool[];
+  effort: Effort;
+  /** Output budget per turn (thinking + tool calls). */
+  maxTokensPerTurn: number;
+  /** Hard limit on model turns. */
+  maxTurns: number;
+  label: string;
+  /** True once the agent's work has been accepted; the loop then stops. */
+  isDone(): boolean;
+  /** Sent when the model stops without finishing. */
+  nudge: string;
+  /** Extra text appended to a turn's tool results, e.g. how many turns are left. */
+  turnNote?(turnsLeft: number): string | null;
+  /** The model's own words between tool calls (its narration). */
+  onText?(text: string): void;
+  /** Continue a saved conversation instead of starting fresh. */
+  resume?: AgentTranscript | null;
+  /** Called after every completed turn with the conversation so far. */
+  onTurn?(t: AgentTranscript): void;
+}
+
+export interface AgentLoopResult {
+  turns: number;
+  stopped: "done" | "turn_limit";
+  usage: CallUsage[];
 }
 
 export class LLMError extends Error {

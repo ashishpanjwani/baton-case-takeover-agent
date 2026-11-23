@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui";
 import { CONNECTIONS } from "@/lib/integrations";
 
-export const metadata: Metadata = { title: "Connections · Case Takeover Agent" };
+export const metadata: Metadata = { title: "Connections · Baton" };
 
 const FLOW = [
   { title: "Case reassigned in the CMS", manual: "You open the case here", connected: "The CMS tells the agent a case has a new owner" },

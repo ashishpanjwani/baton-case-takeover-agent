@@ -1,0 +1,13 @@
+CMS TASK HISTORY EXPORT — Matter CW-2026-0251 — Petrova, Elena
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Exported 11/02/2026
+
+T-0251-01 | Order police report | Assigned: D. Whitfield | Created 07/15/2026 | Due 07/29/2026 | Status: Completed | Completed 07/30/2026
+T-0251-02 | Open UM claim — Bayline Mutual | Assigned: D. Whitfield | Created 07/15/2026 | Due 07/20/2026 | Status: Completed | Completed 07/22/2026
+T-0251-03 | Request Corner Market camera footage be preserved | Assigned: D. Whitfield | Created 07/15/2026 | Due 07/17/2026 | Status: Completed | Completed 07/15/2026
+T-0251-04 | Return signed Proof of Loss to Bayline | Assigned: D. Whitfield | Created 08/14/2026 | Due 10/13/2026 | Status: Completed | Completed 09/02/2026
+T-0251-05 | Schedule recorded statement with Bayline (interpreter) | Assigned: D. Whitfield | Created 08/14/2026 | Due 09/15/2026 | Status: Open | Completed —
+T-0251-06 | Request records & bills — Harbor General | Assigned: D. Whitfield | Created 07/15/2026 | Due 08/15/2026 | Status: Completed | Completed 08/27/2026
+T-0251-07 | Crestline Health — obtain itemized lien | Assigned: D. Whitfield | Created 08/31/2026 | Due 09/30/2026 | Status: Open | Completed —
+T-0251-08 | Translated Proof of Loss for client (Bulgarian) | Assigned: D. Whitfield | Created 08/28/2026 | Due 09/11/2026 | Status: Open | Completed —
+T-0251-09 | Monthly client check-in (interpreter) | Assigned: D. Whitfield | Recurring | Last completed 10/12/2026 | Status: Active

@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { InvestigationEvent } from "@/lib/agent/types";
+import type { TrailEntry } from "@/lib/agent/investigator";
+import type { InvestigationEvent, InvestigationMethod } from "@/lib/agent/types";
 import type { CaseDocument } from "@/lib/store";
 import { DocIcon, EvidenceProvider, useEvidence } from "./evidence";
 import { Badge, cx, formatDate, formatDateTime } from "./ui";
 
 /** AI mode carries only what the user needs: how long a run usually takes. */
-type Mode = { kind: "ai"; typicalMs: number } | { kind: "demo"; /** A prepared example exists for this case. */ available: boolean };
+type Mode = { kind: "ai"; typicalMs: number; method: InvestigationMethod } | { kind: "demo"; /** A prepared example exists for this case. */ available: boolean };
 
 export function CaseWorkspace(props: {
   caseId: string;
@@ -122,8 +123,8 @@ function UploadButton({ caseId }: { caseId: string }) {
 
 interface DocProgress { title: string; extract?: { status: string; detail?: string }; analyze?: { status: string; detail?: string } }
 
-type TimedStep = "analyze" | "synthesize" | "plan";
-const TIMED_STEPS: TimedStep[] = ["analyze", "synthesize", "plan"];
+type TimedStep = "analyze" | "synthesize" | "plan" | "investigate";
+const TIMED_STEPS: TimedStep[] = ["analyze", "synthesize", "plan", "investigate"];
 
 function InvestigatePanel({ caseId, documents, mode, lastRun }: Parameters<typeof CaseWorkspace>[0]) {
   const router = useRouter();
@@ -176,14 +177,17 @@ function InvestigatePanel({ caseId, documents, mode, lastRun }: Parameters<typeo
   const view = useMemo(() => summarise(events), [events]);
   const started = events.length > 0;
   const eta = (step: TimedStep) => stepTime(view, step, nowMs);
-  const totalLeft = view.estimates && running ? TIMED_STEPS.reduce((n, s) => n + (eta(s).leftMs ?? 0), 0) : null;
+  const totalLeft = view.estimates && running ? TIMED_STEPS.filter((s) => view.estimates![s] !== undefined).reduce((n, s) => n + (eta(s).leftMs ?? 0), 0) : null;
+  const agentMode = (view.method ?? (mode.kind === "ai" ? mode.method : "workflow")) === "agent";
 
   return (
     <section className="h-fit rounded-lg border border-line bg-surface lg:sticky lg:top-6">
       <div className="border-b border-line px-4 py-3">
         <h2 className="text-[15px] font-semibold">Investigation</h2>
         <p className="mt-0.5 text-[12.5px] leading-snug text-ink-2">
-          The agent reads every document, rebuilds the case history, checks what was actually completed, and prepares a recovery plan. Every citation is checked against the source text before the report is shown.
+          {agentMode
+            ? "The agent decides what to read and check, follows leads across the file, and records each finding with the exact words it rests on. Every quote is checked as it is recorded, and the report is accepted only once every page has been read and every quote found."
+            : "The agent reads every document, rebuilds the case history, checks what was actually completed, and prepares a recovery plan. Every citation is checked against the source text before the report is shown."}
         </p>
       </div>
 
@@ -225,7 +229,7 @@ function InvestigatePanel({ caseId, documents, mode, lastRun }: Parameters<typeo
 
       {started && (
         <div className="border-t border-line px-4 py-3">
-          <Step label="Read documents" status={view.stages.extract} detail={`${view.extracted}/${documents.length}`}>
+          <Step label={agentMode ? "Prepare the documents" : "Read documents"} status={view.stages.extract} detail={agentMode ? `Turning each file into searchable text, with OCR for scanned pages · ${view.extracted}/${documents.length}` : `${view.extracted}/${documents.length}`}>
             <ul className="mt-1.5 space-y-0.5">
               {view.docs.map(([id, d]) => (
                 <li key={id} className="flex items-center gap-2 text-[12px]">
@@ -237,10 +241,21 @@ function InvestigatePanel({ caseId, documents, mode, lastRun }: Parameters<typeo
               ))}
             </ul>
           </Step>
-          <Step label="Analyse each document" status={view.stages.analyze} detail={view.stageDetail.analyze} time={eta("analyze")} />
-          <Step label="Review the case history and identify issues" status={view.stages.synthesize} detail={view.stageDetail.synthesize} time={eta("synthesize")} />
-          <Step label="Prepare work status and recovery plan" status={view.stages.plan} detail={view.stageDetail.plan} time={eta("plan")} />
-          <Step label="Check every citation against the documents" status={view.stages.verify} detail={view.stageDetail.verify} />
+          {agentMode ? (
+            <>
+              <Step label="Investigate the case" status={view.stages.investigate} detail={view.stageDetail.investigate} time={eta("investigate")}>
+                {view.trail.length > 0 && <AgentFeed trail={view.trail} running={view.stages.investigate === "started"} />}
+              </Step>
+              <Step label="Final check of every citation" status={view.stages.verify} detail={view.stageDetail.verify} />
+            </>
+          ) : (
+            <>
+              <Step label="Analyse each document" status={view.stages.analyze} detail={view.stageDetail.analyze} time={eta("analyze")} />
+              <Step label="Review the case history and identify issues" status={view.stages.synthesize} detail={view.stageDetail.synthesize} time={eta("synthesize")} />
+              <Step label="Prepare work status and recovery plan" status={view.stages.plan} detail={view.stageDetail.plan} time={eta("plan")} />
+              <Step label="Check every citation against the documents" status={view.stages.verify} detail={view.stageDetail.verify} />
+            </>
+          )}
 
           {view.notices.map((n, i) => (
             <div key={i} className="mt-2 rounded-md bg-amber-soft px-3 py-2 text-[12px] text-amber">{n}</div>
@@ -275,7 +290,9 @@ function summarise(events: InvestigationEvent[]) {
   const stageEnd: Record<string, number> = {};
   const docs = new Map<string, DocProgress>();
   const notices: string[] = [];
-  let estimates: Record<TimedStep, number> | null = null;
+  let estimates: Partial<Record<TimedStep, number>> | null = null;
+  let method: InvestigationMethod | null = null;
+  const trail: TrailEntry[] = [];
   let error: string | null = null;
   let completedRunId: string | null = null;
   let startedAt: string | null = null;
@@ -284,7 +301,9 @@ function summarise(events: InvestigationEvent[]) {
     if (e.type === "run_started") {
       startedAt = e.at;
       estimates = e.estimates ?? null;
+      method = e.method ?? null;
     }
+    if (e.type === "agent") trail.push(e.entry);
     if (e.type === "stage") {
       stages[e.stage] = e.status;
       if (e.detail) stageDetail[e.stage] = e.detail;
@@ -312,7 +331,7 @@ function summarise(events: InvestigationEvent[]) {
   const extracted = [...docs.values()].filter((d) => d.extract?.status === "completed" || d.extract?.status === "failed").length;
   const ms = startedAt && endedAt ? new Date(endedAt).getTime() - new Date(startedAt).getTime() : 0;
   const elapsed = ms < 1000 ? `${ms} ms` : formatTook(ms);
-  return { stages, stageDetail, stageStart, stageEnd, estimates, docs: [...docs.entries()], notices, error, completedRunId, extracted, elapsed };
+  return { stages, stageDetail, stageStart, stageEnd, estimates, method, trail, docs: [...docs.entries()], notices, error, completedRunId, extracted, elapsed };
 }
 
 type View = ReturnType<typeof summarise>;
@@ -345,6 +364,52 @@ function formatDuration(ms: number) {
 function formatTook(ms: number) {
   const s = Math.round(ms / 1000);
   return s < 60 ? `${s} s` : `${Math.floor(s / 60)} min ${s % 60} s`;
+}
+
+const KIND_LABEL: Record<TrailEntry["kind"], string> = {
+  thought: "", read: "Read", search: "Search", check: "Check", record: "Record", remove: "Withdraw", submit: "Submit",
+};
+
+/** What the agent is doing, live: its own narration and each action it takes. */
+function AgentFeed({ trail, running }: { trail: TrailEntry[]; running: boolean }) {
+  const n = (k: TrailEntry["kind"]) => trail.filter((t) => t.kind === k).length;
+  const count = (c: number, one: string, many: string) => `${c} ${c === 1 ? one : many}`;
+  const tally = [
+    count(n("read"), "document read", "documents read"),
+    count(n("search"), "search", "searches"),
+    count(n("check"), "quote check", "quote checks"),
+    count(n("record"), "item recorded", "items recorded"),
+  ];
+  const box = useRef<HTMLDivElement>(null);
+  const stick = useRef(true);
+  useEffect(() => {
+    if (stick.current && box.current) box.current.scrollTop = box.current.scrollHeight;
+  }, [trail.length]);
+  return (
+    <div className="mt-2">
+      <div
+        ref={box}
+        onScroll={(e) => {
+          const el = e.currentTarget;
+          stick.current = el.scrollHeight - el.scrollTop - el.clientHeight < 24;
+        }}
+        className="max-h-80 space-y-1 overflow-y-auto rounded-md border border-line bg-canvas px-2.5 py-2"
+      >
+        {trail.map((t, i) =>
+          t.kind === "thought" ? (
+            <p key={i} className="border-l-2 border-accent/40 pl-2 text-[12px] leading-snug text-ink">{t.text}</p>
+          ) : (
+            <div key={i} className="flex gap-2 pl-2.5 text-[11.5px] leading-snug">
+              <span className={cx("w-[52px] shrink-0 font-medium uppercase tracking-wide text-[10px] leading-[16px]", t.ok === false ? "text-amber" : "text-ink-3")}>{KIND_LABEL[t.kind]}</span>
+              <span className={cx("min-w-0", t.ok === false ? "text-amber" : "text-ink-2")}>{t.text}</span>
+            </div>
+          ),
+        )}
+        {running && <p className="pl-2.5 text-[11.5px] text-ink-3">Working…</p>}
+      </div>
+      <p className="mt-1 text-right text-[11px] text-ink-3 tabular">{tally.join(" · ")}{running ? " so far" : ""}</p>
+    </div>
+  );
 }
 
 function Step({ label, status, detail, time, children }: { label: string; status?: string; detail?: string; time?: StepTime; children?: React.ReactNode }) {

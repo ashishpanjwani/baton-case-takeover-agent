@@ -1,0 +1,11 @@
+CMS TASK HISTORY EXPORT — Matter CW-2026-0266 — Gonzalez, Maria
+[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]
+Exported 11/02/2026
+
+T-0266-01 | Order police report | Assigned: D. Whitfield | Created 09/28/2026 | Due 10/09/2026 | Status: Completed | Completed 10/06/2026
+T-0266-02 | Letters of representation — Glide/Harborline, Northpoint | Assigned: D. Whitfield | Created 09/28/2026 | Due 10/02/2026 | Status: Completed | Completed 10/01/2026
+T-0266-03 | Request records & bill — Cedar Urgent Care | Assigned: D. Whitfield | Created 09/28/2026 | Due 10/16/2026 | Status: Completed | Completed 10/16/2026
+T-0266-04 | Find lien-based provider for client (neck/shoulder) | Assigned: D. Whitfield | Created 09/30/2026 | Due 10/09/2026 | Status: Open | Completed —
+T-0266-05 | Respond to Northpoint re recorded statement (attorney to decide) | Assigned: D. Whitfield | Created 10/08/2026 | Due 10/15/2026 | Status: Open | Completed —
+T-0266-06 | Send trip receipt to Harborline | Assigned: D. Whitfield | Created 10/14/2026 | Due 10/21/2026 | Status: Open | Completed —
+T-0266-07 | Monthly client check-in | Assigned: D. Whitfield | Recurring | Last completed 10/09/2026 | Status: Active
