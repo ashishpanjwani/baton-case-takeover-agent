@@ -4,6 +4,12 @@ When a personal injury case changes hands, the new case manager inherits a file 
 
 > Everything in this project is fictional: the firm, clients, providers, insurers, addresses and phone numbers. Every document is marked `[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]`.
 
+**At a glance**
+- **For:** case managers at US plaintiff-side personal injury firms who inherit a case from a colleague.
+- **What it produces:** a takeover report in which every statement is cited to a page and checked by code. It sorts the work into confirmed incomplete, potentially incomplete, unverified and conflicting, and ends with a prioritised recovery plan with drafts.
+- **How:** a tool-using AI agent runs the investigation: it decides what to read, searches the file to follow leads, and builds the report item by item. Deterministic code enforces the rules it can't talk its way around.
+- **Status:** a working prototype. Next.js and TypeScript on the Anthropic API, local OCR, 57 automated tests. Nothing is connected to real firm systems, and it never sends anything.
+
 ---
 
 ## The problem
@@ -20,7 +26,7 @@ Case managers leave, go on leave or have their caseloads rebalanced. When that h
 - a **short handover memo**, often written by a supervisor from what the CMS says;
 - many other cases needing attention at the same time.
 
-The memo and the CMS describe what *should* have happened. The documents describe what *did* happen, and the two often disagree. Here is what that looks like in one of the sample cases (Sarah Johnson):
+The memo and the CMS describe what *should* have happened. The documents describe what *did* happen, and the two often disagree. A typical example:
 
 - The CMS task for orthopedic records says **"Completed"**. The provider's own letter says it sent only part of the records.
 - The handover memo says **treatment is complete**. The client's last call says she is still being treated.
@@ -86,11 +92,13 @@ It does points 1 to 5 and 7 today. It shows how point 6 would work.
 
 Click any citation and the document opens at that page, with the words highlighted.
 
-**It helps you act, without acting for you.**
-- **Approve or dismiss** each proposed step, and edit its draft.
-- **How to carry this out** shows, for each step, what a connected system would do (create the CMS task, put the email in your Drafts, submit the records request). It also shows what to do by hand today, with the draft or task ready to download or copy.
-- **Download tasks (CSV)** exports the whole plan for import into a CMS.
-- The **Connections** page explains each integration: what it would automate, what the firm needs to set it up, and what always stays with a person.
+**It prepares the work, but a person carries it out.** Each step in the recovery plan comes ready to act on, and nothing happens until someone decides:
+- **Approve or dismiss.** The case manager records whether they agree with a step, and can edit its draft letter or email first. The decision is stored in the app; nothing is sent.
+- **How to carry this out.** A panel on each step lists the systems the step involves (the CMS, email, a records vendor, fax, phone). For each one it shows two things:
+  - what would happen with a connection, e.g. "create this task in the CMS, due 11/26" or "put this email in your Drafts folder for you to send";
+  - what to do by hand today, with the draft or task text ready to download or copy.
+- **Download tasks (CSV).** Exports every step that hasn't been dismissed as a spreadsheet the firm can import into its CMS as tasks.
+- The **Connections** page sets out each integration: what it would automate, what the firm would need to set it up, and what always stays with a person.
 
 **What it will not do:** send anything, contact anyone, change a CMS record, give legal advice, or judge liability or case value.
 
@@ -124,37 +132,6 @@ A walk through the app:
 4. **Open report** shows the report described above. Click any citation to see the source page. The trail at the top (**All cases / client / Takeover report**) leads back to the case list or the case.
 5. In the **Recovery plan**, approve or dismiss steps, edit drafts, and open **How to carry this out**. Decisions are only recorded. Nothing is sent.
 6. **Connections** (top bar) explains how each manual step would be automated.
-
-## The sample cases
-
-Each case was written to test something specific. Every case except Johnson has a `TEST-NOTES.md` answer key next to its documents, listing what a good report should and shouldn't say. (Johnson's problems are listed below, and its prepared demo report doubles as a reference answer.) The agent never sees the answer keys. Compare a report against them.
-
-| Case | Documents | What it tests |
-|---|---|---|
-| **Sarah Johnson**, CW-2026-0187, car accident | 15 | The main demo, with a mix of every kind of problem (listed below). The only case with a prepared demo-mode report |
-| **Aisha Thompson**, CW-2025-0911, car accident | 14 | A **clean** file where nearly everything is done. Does the agent avoid inventing problems? |
-| **Robert Kim**, CW-2026-0233, dog bite | 14 | A **messy** early-stage file: two different incident dates, an insurer stated as fact but never confirmed, a clinic that closed with a records request marked "Completed" that never went through, missing photos, an undocumented rabies observation |
-| **James Whitaker**, CW-2026-0198, commercial truck | 16 | An evidence-preservation letter marked "Completed" that was returned undelivered. The freight broker's insurer mistaken for the trucking company's. A workers' comp lien. A surgery approval the memo says was granted but is still undecided. The ER record is a **scanned fax**, readable only through OCR |
-| **Elena Petrova**, CW-2026-0251, hit-and-run pedestrian | 14 | An insurer form the CMS says was sent, but the insurer says it never received (the only copy is unsigned). An ER bill counted twice in the medical totals. Camera footage that was overwritten before anyone asked for it. A memo saying police found the driver when they didn't. A client who needs an interpreter |
-| **Maria Gonzalez**, CW-2026-0266, rideshare passenger | 13 | A **medical record that belongs to a different patient** (similar name, different date of birth, an ankle sprain), which the memo says to send to the insurers. The rideshare insurer and the client's trip receipt disagree on whether the ride was still in progress. The memo blames the wrong driver |
-| **Daniel Osei**, CW-2025-0874, city sidewalk fall | 15 | A late-stage case. The claim filed with the city gives the **wrong street number**, so the city inspected the wrong spot. The demand lists a bill as $3,150 instead of $3,510. The memo says liability was acknowledged and Medicare resolved; neither is true. The city's inspection letter is a **scanned image**, readable only through OCR |
-| **Grace Liu**, CW-2026-0281, grocery store slip (client is 15) | 12 | A **minor client**: the hospital refused the records request because Grace signed her own authorization, yet the memo says the records arrived. A $5,000 insurance payment the memo calls "pending" was already deposited by her mother. Ongoing concussion symptoms against "recovered well". Tests that the agent also **credits work done right**: the store's video really was preserved |
-| **Hannah Brooks**, CW-2026-0290, cyclist hit by an opened car door | 13 | **A conflict of interest**: the driver who hit her is a current client of the same firm, the check result was never reviewed, and the memo says "conflicts cleared". The rental car insurer's own 30-day deadline has passed. Coverage is limited, and her own policy has not been looked at |
-| **Samuel Adeyemi**, CW-2026-0219, construction site fall | 14 | **A client nobody can reach**: his phone is disconnected and letters come back, but his new address is already in the workers' comp letters. The firm wrote to the wrong scaffold company (a similar name). The memo says the contractor accepted responsibility; its insurer says the opposite. Includes a **scanned OSHA report** |
-| Five more cases | none | Empty. Open one and upload documents to investigate it |
-
-The Johnson case's planted problems:
-
-- Ortho records request marked "Completed", but the provider released only partial records (confirmed incomplete)
-- MRI records task open and never requested (confirmed incomplete)
-- Physical therapy and urgent care reported by the client but never added to the provider list (potentially incomplete)
-- A separate radiology bill referred to on the ER statement (potentially incomplete)
-- Liability "accepted" in a CMS note, but "investigation remains open" in a later adjuster email (conflict)
-- Declarations page and liability limits recorded in the CMS but not in the package, and contradicted by the adjuster (conflict, unverifiable document)
-- Chiropractic bills recorded as received in June and as never sent in September (conflict)
-- Reassignment memo says treatment is complete, but the client says it is ongoing (conflict)
-- Client voicemail with no recorded callback (unverified)
-- Plus genuinely completed work: police report, ER records and bill, ambulance bill, MedPay paid and exhausted
 
 ---
 
@@ -209,71 +186,71 @@ And these rules for judging what matters:
 - **A limit on steps** (60 by default) bounds the time and cost of a run. If it is reached, the report says so.
 - **None of the tools can send anything, contact anyone or change a record.** The agent can only read the file and write the report.
 
-While it works, the case page shows a **live feed of what the agent is doing**: a short sentence of its own reasoning before each move, then each action. This excerpt is from the Daniel Osei run:
-
-> *The memo says Medicare is resolved and the transcript is on file, but the CMS task list shows an open Medicare item and the document index has no transcript. Next I'll read the remaining documents.*
-> …
-> *The file has several conflicts so far: the street address, the PT bill amount, Medicare status, and "liability acknowledged." I'll search for every other mention of the key items before recording anything.*
-> Search · Searched the file for "transcript" — 4 matches in 4 documents
-> Search · Searched the file for "Market Street" — 5 matches in 4 documents
-> Search · Searched the file for "3,150" — 1 match in 1 document
-
-Under the feed, a tally keeps count, for example *"15 documents read · 6 searches · 0 quote checks · 51 items recorded"*.
+While it works, the case page shows a **live feed of what the agent is doing**: a short sentence of its own reasoning before each move (*"The memo says the truck data is protected — checking whether the preservation letter actually arrived"*), then each action it takes.
 
 The same trail is kept with the report, under **"How this report was investigated"**, so anyone can see how each conclusion was reached.
 
 **3. Final check.** After the agent finishes, ordinary code checks every quote in the report one more time against the document it cites. Page numbers are taken from where the words were actually found. Anything that still can't be supported is removed and listed under "Open questions & checks", so nothing disappears silently.
 
-### One finding, from start to finish
+### Under the hood
 
-How the agent handled the wrong-patient record in the Maria Gonzalez case:
+**The loop.** The agent is a manual tool-use loop on the Anthropic Messages API, with adaptive thinking and medium effort by default. Each round:
+1. The model thinks, writes one sentence for the live feed, and asks for one or more tools. It can batch independent calls, such as reading five documents at once.
+2. The app checks each tool request against that tool's schema, runs it, and sends the results back. A request that fails the check is not run; the model gets an error explaining why.
+3. The model decides its next move from the results.
 
-- It began with the memo, the CMS notes and the task list. The memo told the new case manager to *"send the urgent care records to the insurers"*.
-- It then read the rest of the file, including the urgent care record. The record names *Mariela Gonzales*, born 03/02/1991, and describes an ankle sprain from soccer. The client is *Maria L. Gonzalez*, born 11/23/1988, with neck and shoulder pain.
-- Before recording anything, it **searched the file for "Gonzales"**, the other patient's spelling, to check whether that name appeared anywhere else. It appears only on that record.
-- It decided: *"The Cedar record names a different patient, which is the most serious issue, so I'll record it first."* It recorded **F1, Conflicting, high priority**, quoting the record, the client information sheet and the provider list. Every quote was checked on the spot and found.
-- Its first next step overrides the memo: *"Quarantine the Cedar record (doc-05) and escalate the patient identity mismatch. Do not send it to any insurer or use it in any demand or summary."* Its reason: *"Sending it would disclose another person's health information."* The step is escalated to the supervisor and the attorney, and a later step asks the clinic for the client's correct record.
-- On submit, the gate checked that every page had been read and every quote found, and accepted the report.
+The loop ends when the report is accepted or the round limit is reached. Edge cases are handled explicitly:
+- a reply that stops without calling a tool gets a nudge to continue;
+- a tool call cut off by the output limit is never run;
+- when 8 rounds remain, every reply tells the model to wrap up and submit;
+- after 4 refused submissions the report is accepted anyway, and the final check strips anything unsupported.
 
-In the report, clicking the citation opens the urgent care record with the other patient's name highlighted.
+**What the model starts with.** A system prompt (its role, how to work, the reasoning rules, the ranking rules) and an opening message with the case details, today's date and **the list of documents: ids, titles, categories, page counts, and which pages are OCR text**. It does *not* get the documents themselves. It sees a document only when it chooses to open it, which is why "every page has been read" is enforced in code rather than assumed.
 
-### Making it dependable
+**Where the report lives.** The model never writes the report as one block of text. The app holds a **draft report**, and each "record" call adds or replaces one item in it: a finding, timeline event, completed or outstanding item, or recovery step. The app assigns the ids (F1, E1, C1, O1, A1). Every item has a typed schema, the same one the report uses, so a malformed item is rejected at the boundary.
 
-- **Interrupted runs pick up where they stopped.** The agent's conversation and its draft report are saved after every step. If the connection drops or the laptop sleeps, the next run continues from the last step instead of starting over and paying again. If the browser is closed, the run still finishes and the report is saved.
-- **Checked inputs.** Everything the agent sends to a tool is checked against the expected format, first by the API as it is written and then by the app. If it's wrong, nothing happens and the agent is told why.
-- **The earlier design is still available.** Setting `INVESTIGATION_METHOD=workflow` in `.env.local` runs the investigation as a fixed sequence of steps instead, so the two can be compared on the same case.
+**The feedback the model gets.** Every tool reply is plain, specific text, and that is what lets the agent correct itself. For example:
+- *"Recorded F3. quote 1: found in doc-09 page 1; quote 2: NOT FOUND in doc-07. Use check_quote or search_case_file to find the exact wording, then revise this item"*;
+- *"Warning: as recorded this would be shown as potentially incomplete. Either cite the statement of the gap, or change the category"*;
+- a refused submission lists every problem: unread pages, missing quotes, high-priority findings with no step.
 
-### Models and cost
+**How a quote is checked.** The same matcher runs when an item is recorded, at submission, and in the final check. Both the quote and the page text are normalised for case, whitespace, curly quotes and dash variants, and nothing else. The quote must then appear verbatim. A "…" may join fragments, which must appear in order on the same page. Very short fragments are rejected so trivial words can't match. The page number comes from where the match was found, never from the model. The category rule then applies: a "confirmed incomplete" finding must state that a document records the gap, and at least one verified quote must contain wording like "not yet requested", "had not been finalized", "never" or "outstanding". Otherwise it is downgraded, and the report shows the correction.
 
-The agent uses one model throughout. The default is **Claude Opus**, the strongest, and it can be changed in `.env.local`.
+**Resuming and caching.** After every round, the conversation, the draft report and the trail are saved, keyed by a hash of the model settings and the opening prompt. If a run dies (network drop, laptop asleep), the next run with the same inputs continues from the last finished round. The whole conversation is re-sent every round with automatic prompt caching, so earlier rounds are billed at about a tenth of the input price. A closed browser doesn't stop a run either: the server finishes it and saves the report.
 
-- **Haiku (measured):** the sample cases so far cost **$0.03–0.05 per investigation and took 2½–4 minutes**. That makes it practical for testing, and every check above still applies.
-- **Opus (estimate, not yet measured):** about $1.50–2.50 per investigation. It should give stronger judgment on difficult files.
+**Documents.** PDFs are extracted page by page. A page with under 25 characters of text is treated as a scan: it is rendered and read by Tesseract on the local machine, so no document goes to a third-party OCR service. OCR pages are labelled to the model and in the document viewer.
 
-The agent re-sends its conversation on every step. That part is cached, which makes it about ten times cheaper. Cost is never shown in the app, which is built for the case manager.
+**Around the agent.** The model sits behind a small provider interface, so the engine doesn't depend on one vendor. The earlier fixed workflow (notes on each document, then the report in two structured-output calls) is still available as a fallback. Each run is stored separately from the source documents, along with its trail and verification summary. Setting `INVESTIGATION_METHOD=workflow` switches to the fixed workflow, so the two can be compared on the same case.
 
-## Results so far
+**Models.** One model runs the whole investigation. The default is Claude Opus; Claude Haiku is a few cents a run and useful for iterating. Usage and cost are logged per run, never shown in the app.
 
-Agent runs on Haiku, compared with each case's answer key:
+**Stack.** Next.js 16 (App Router), React 19, TypeScript, Tailwind, Zod 4, the Anthropic TypeScript SDK, pdf.js and tesseract.js. The automated tests drive the real tools with a scripted fake agent, and run the real agent loop against a stubbed API, so no test needs a key or spends money.
 
-| Case | Planted problems caught | Notable | Cost | Time |
-|---|---|---|---|---|
-| Robert Kim | 7 of 8 | Mentioned the unidentified property owner only in passing | $0.04 | 3 min 14 s |
-| James Whitaker | 8 of 8 | Linked the returned preservation letter to the second address on the carrier registration | $0.04 | 3 min 24 s |
-| Daniel Osei | 6 of 6 | Read the scanned city letter through OCR; searched for the wrong bill figure across the file | $0.03 | 2 min 24 s |
-| Maria Gonzalez | 6 of 6 | Put the wrong-patient record first and overrode the memo's instruction to send it | $0.03 | 2 min 49 s |
+## Design decisions
 
-None of the runs drew a legal conclusion or treated a memo's claim as fact. Two things still need work:
-- **Ranking among the high-priority findings.** This has improved since the agent was told to rank by impact, but it needs more runs to confirm.
-- **Tool-call slips with smaller models.** One run spent about 40 extra steps re-sending tool calls that Haiku had formatted wrongly. A settings fix brought that back to normal, and the step limit caps the cost if it happens again.
+- **An agent, but with guard rails written in code.** The value of this job is in following leads: a returned letter leads to a second address, a "Completed" task to the letter that contradicts it. Fixed steps can't do that well, so the model decides what to look at. What it may *not* decide is whether the report holds up. Reading every page, finding every quote and the category rule are checked by code, not requested in a prompt.
+- **Citations are checked by code, not by a second AI.** An AI asked to check an AI can agree with a mistake. An exact text match can't. The cost is strictness: the agent must quote exactly, and when it doesn't, it is told and fixes it.
+- **"Absence is not proof" is built into the categories.** The most common error in reviewing a file is treating a missing record as missing work. The four categories, plus the rule that "confirmed incomplete" needs a document that *states* the gap, keep "we can't find it" separate from "it wasn't done".
+- **No legal judgment, by design.** The agent compares what records say, including what they say about fault, and routes anything needing judgment to the attorney. It never decides fault, coverage, deadlines' legal effect or case value.
+- **Nothing leaves without a person.** The tools can only read the file and write the report. Drafts and integrations are previews; a person sends everything.
+- **Documents stay local where possible.** OCR runs on the machine. Only the text the agent reads goes to the model API.
+- **The checks don't depend on the model.** A cheaper model can be used to iterate quickly; it produces a thinner report, not a less honest one, because the same code checks every quote and enforces the same rules.
+
+## What's next
+
+- **Automated evaluation.** Score reports against test cases with known, planted problems, so every change to the agent's instructions is measured rather than judged by eye.
+- **Compare models.** Put a number on the quality difference between Opus and cheaper models against their cost.
+- **Bigger, messier files.** The test files so far are small enough to read in full. Real files run to hundreds of pages, which is where search and selective reading start to matter, and where context limits need a strategy.
+- **Real connections,** starting with read access to one CMS. That removes the manual upload and lets a report be re-checked when new documents arrive.
+- **Multiple users,** with sign-in and a record of who approved what.
 
 ## What is real and what is not
 
 | | Status |
 |---|---|
 | Reading documents, uploads, local OCR of scanned PDFs | **Real.** OCR works in English only, and handwriting or poor faxes read badly |
-| AI investigation by the agent | **Real.** Run live on four sample cases (see "Results so far"), and covered by tests with a scripted model and a stubbed API |
-| AI investigation by the fixed workflow | **Real.** Run live on the Johnson and Kim cases. Kept as a fallback |
+| AI investigation by the agent | **Real.** Run live, and covered by tests with a scripted model and a stubbed API |
+| AI investigation by the fixed workflow | **Real.** Kept as a fallback |
 | Case list: top problem, filters, days without activity, out-of-date report warning | **Real** |
 | Citation checking and highlighting | **Real** |
 | Demo mode (no API key) | A **hand-written example report** for the Johnson case, checked the same way as an AI report and labelled as an example everywhere |
