@@ -1,4 +1,4 @@
-# Case Takeover Agent
+# Baton — case takeover agent
 
 When a personal injury case changes hands, the new case manager inherits a file they have never seen. This prototype reads that file for them. It works out what has really been done, what hasn't, and what nobody can tell from the records. Then it proposes what to do first, and every statement in its report links to the page it came from.
 
@@ -32,7 +32,7 @@ None of these is visible from the memo. Each would surface weeks later, as a del
 ## Why it happens
 
 - **A "Completed" task records that someone ticked a box, not that the outcome happened.** A request can be marked done when it was only sent, and sometimes when it wasn't even sent.
-- **Handover memos are summaries of summaries.** They repeat what the CMS says and add what the writer remembers.
+- **Handover memos are written quickly, from the CMS and from memory, not from the documents.** If the CMS is wrong, the memo repeats the mistake. And because it is written with authority, the new case manager has no reason to doubt it.
 - **The evidence is scattered** across intake notes, letters, emails, faxes, call logs and provider lists. The most important problems are often things that are *missing*, and missing things are the hardest to notice.
 - **Reading a file properly takes hours.** With many cases arriving at once, the new case manager has to trust the memo and fix problems as they appear.
 
@@ -53,6 +53,8 @@ Picture an experienced, careful case manager who reads every page of the file on
 ## What this prototype does
 
 It does points 1 to 5 and 7 today. It shows how point 6 would work.
+
+**It shows where to start.** The case list puts the cases that need attention first. For each investigated case it shows the single most important problem the report found, for example *"Cedar urgent care record in file appears to belong to a different patient · 7 high priority"*. Each case also shows how long it has gone without activity, and a warning if documents arrived after its report was made. Filters split the list into investigated cases, cases ready to investigate, and cases still waiting for documents.
 
 **It reads the whole file.** That includes PDFs (page by page), text files and **scanned faxes**, which are read with OCR on your own machine.
 
@@ -94,7 +96,7 @@ Click any citation and the document opens at that page, with the words highlight
 
 **What is still missing compared with the ideal:**
 - There are no live connections to a CMS, email or document storage, so files are uploaded by hand.
-- When new records arrive you re-run the investigation; it doesn't update the report by itself.
+- When new records arrive, the case list flags the report as out of date, but you re-run the investigation yourself; it doesn't update the report by itself.
 - It is single-user, with no sign-in.
 
 ---
@@ -116,16 +118,16 @@ cp .env.example .env.local
 
 A walk through the app:
 
-1. **Cases** lists eight reassigned cases. Four have case files loaded; four are "Awaiting documents".
+1. **Cases** lists fifteen reassigned cases, most urgent first. Ten have case files loaded; five are waiting for documents. Each row has one button for what to do next: **View report** for a case already investigated, **Open to investigate** for one ready to run, and **Add documents** for an empty one.
 2. **Open a case** to see its file. Click any document to read it, or use **+ Add documents** to upload PDFs or text files (several at once). Investigate stays disabled until a case has documents.
-3. **Investigate case** shows each step as it runs, with the time remaining.
-4. **Open report** shows the report described above. Click any citation to see the source page.
+3. **Investigate case** shows the agent working live: what it is checking and why, and each document it reads, search it makes and item it records, with the time remaining.
+4. **Open report** shows the report described above. Click any citation to see the source page. The trail at the top (**All cases / client / Takeover report**) leads back to the case list or the case.
 5. In the **Recovery plan**, approve or dismiss steps, edit drafts, and open **How to carry this out**. Decisions are only recorded. Nothing is sent.
 6. **Connections** (top bar) explains how each manual step would be automated.
 
 ## The sample cases
 
-Each case was written to test something specific. The three test cases have a `TEST-NOTES.md` answer key next to their documents, listing what a good report should and shouldn't say. The agent never sees it. Compare a report against it.
+Each case was written to test something specific. Every case except Johnson has a `TEST-NOTES.md` answer key next to its documents, listing what a good report should and shouldn't say. (Johnson's problems are listed below, and its prepared demo report doubles as a reference answer.) The agent never sees the answer keys. Compare a report against them.
 
 | Case | Documents | What it tests |
 |---|---|---|
@@ -133,7 +135,13 @@ Each case was written to test something specific. The three test cases have a `T
 | **Aisha Thompson**, CW-2025-0911, car accident | 14 | A **clean** file where nearly everything is done. Does the agent avoid inventing problems? |
 | **Robert Kim**, CW-2026-0233, dog bite | 14 | A **messy** early-stage file: two different incident dates, an insurer stated as fact but never confirmed, a clinic that closed with a records request marked "Completed" that never went through, missing photos, an undocumented rabies observation |
 | **James Whitaker**, CW-2026-0198, commercial truck | 16 | An evidence-preservation letter marked "Completed" that was returned undelivered. The freight broker's insurer mistaken for the trucking company's. A workers' comp lien. A surgery approval the memo says was granted but is still undecided. The ER record is a **scanned fax**, readable only through OCR |
-| Four more cases | none | Empty. Open one and upload documents to investigate it |
+| **Elena Petrova**, CW-2026-0251, hit-and-run pedestrian | 14 | An insurer form the CMS says was sent, but the insurer says it never received (the only copy is unsigned). An ER bill counted twice in the medical totals. Camera footage that was overwritten before anyone asked for it. A memo saying police found the driver when they didn't. A client who needs an interpreter |
+| **Maria Gonzalez**, CW-2026-0266, rideshare passenger | 13 | A **medical record that belongs to a different patient** (similar name, different date of birth, an ankle sprain), which the memo says to send to the insurers. The rideshare insurer and the client's trip receipt disagree on whether the ride was still in progress. The memo blames the wrong driver |
+| **Daniel Osei**, CW-2025-0874, city sidewalk fall | 15 | A late-stage case. The claim filed with the city gives the **wrong street number**, so the city inspected the wrong spot. The demand lists a bill as $3,150 instead of $3,510. The memo says liability was acknowledged and Medicare resolved; neither is true. The city's inspection letter is a **scanned image**, readable only through OCR |
+| **Grace Liu**, CW-2026-0281, grocery store slip (client is 15) | 12 | A **minor client**: the hospital refused the records request because Grace signed her own authorization, yet the memo says the records arrived. A $5,000 insurance payment the memo calls "pending" was already deposited by her mother. Ongoing concussion symptoms against "recovered well". Tests that the agent also **credits work done right**: the store's video really was preserved |
+| **Hannah Brooks**, CW-2026-0290, cyclist hit by an opened car door | 13 | **A conflict of interest**: the driver who hit her is a current client of the same firm, the check result was never reviewed, and the memo says "conflicts cleared". The rental car insurer's own 30-day deadline has passed. Coverage is limited, and her own policy has not been looked at |
+| **Samuel Adeyemi**, CW-2026-0219, construction site fall | 14 | **A client nobody can reach**: his phone is disconnected and letters come back, but his new address is already in the workers' comp letters. The firm wrote to the wrong scaffold company (a similar name). The memo says the contractor accepted responsibility; its insurer says the opposite. Includes a **scanned OSHA report** |
+| Five more cases | none | Empty. Open one and upload documents to investigate it |
 
 The Johnson case's planted problems:
 
@@ -150,108 +158,126 @@ The Johnson case's planted problems:
 
 ---
 
-## How it works
+## How the investigation runs
 
-The investigation is a fixed sequence of steps controlled by code (`src/lib/agent/engine.ts`), not an open-ended AI agent:
+The investigation is run by an **AI agent**. Like an experienced case manager on their first day with a file, it decides for itself what to read, what to check and which leads to follow. Code doesn't choose its steps. Code does set the rules it can't get around: every quote is checked, every page must be read, and nothing leaves the firm.
 
-1. **Read.** Every document is read. PDFs are read page by page, so citations can name a page. A page with almost no text (under 25 characters) is treated as scanned and read with OCR (`lib/ocr.ts`, Tesseract, run locally).
-2. **Analyse each document** (AI). One call per document lists its dated events, work items with their recorded status, and the people and organisations it mentions, each with an exact quote. Up to 16 documents are analysed at once.
-3. **Write the report** (AI, in two calls). Part 1 writes the overview, timeline and findings. Part 2 writes completed and outstanding work, the recovery plan and the open questions, using part 1's findings. It is split because the full report format is too large for a single structured response. The instructions encode the reasoning rules:
-   - absence of a record is not proof something didn't happen;
-   - a missing document, a missing request and an unconfirmed outcome are different things;
-   - conflicts are reported, not resolved;
-   - a "Completed" status is not evidence of the outcome;
-   - no negligence inferences and no legal conclusions.
-4. **Check** (code, no AI). Every quote is matched against the cited document. Matching ignores only differences in case, spacing, dashes and quote marks. Page numbers come from where the match is found, not from the AI. Unmatched quotes are removed, and anything left without evidence is withheld and listed. Then the category rule runs: a "Confirmed incomplete" finding must declare that a document states the gap, and must quote wording such as "not yet requested", "outstanding" or "never sent". Otherwise it is downgraded, and the correction is shown on the finding. The wording list is in `verify.ts` (`GAP_WORDING`).
+```
+ Case file ──▶ 1. Prepare ─▶ 2. The agent investigates ──────────────────────▶ 3. Final check ──▶ Report
+              (text+OCR)     │                                         ▲      (every quote)    for review
+                             │  reads documents  ·  searches the file  │
+                             │  checks quotes  ·  records findings     │
+                             │  and next steps  ·  submits the report  │
+                             └──── submission refused? fix and retry ──┘
+```
 
-AI output is validated twice: by the API's structured-output schema and again by Zod before use. A failed validation is retried once with the error, and then the run fails.
+**1. Prepare the documents.** Before the agent starts, every file is turned into searchable text, keeping track of the page each line is on. This is mechanical, not reading for meaning: the agent does the reading in stage 2. Scanned pages, such as faxes, are read with OCR on the local machine. Nothing is sent anywhere in this stage.
 
-**Models.** The engine asks for a *role*, and each role maps to a model:
+**2. The agent investigates.** The agent is given the list of documents and a goal: *a takeover report the incoming case manager can rely on*. It has a set of tools, and the choice of which to use, and when, is its own:
 
-| Step | Role | Default | Why |
-|---|---|---|---|
-| Per-document analysis | `extraction` | `claude-haiku-5-5` ($0.10 / $0.50 per 1M tokens) | Simple, high-volume work, and quotes are checked by code anyway |
-| Report part 1: overview, timeline, findings | `reasoning` | `claude-opus-5-5` ($4 / $20) | The conflicts and "missing vs. unverified" distinctions depend on this step |
-| Report part 2: work status, recovery plan, drafts | `planning` | same as `reasoning` | Builds on part 1's findings |
-
-Settings, all optional, in `.env.local`:
-
-| Variable | Effect |
+| Tool | What it does |
 |---|---|
-| `ANTHROPIC_EXTRACTION_MODEL` | Model for per-document analysis |
-| `ANTHROPIC_REASONING_MODEL` | Model for report part 1, and part 2 unless set separately |
-| `ANTHROPIC_PLANNING_MODEL` | Model for report part 2 only, e.g. `claude-sonnet-5-5` |
-| `ANTHROPIC_REASONING_EFFORT` | `low` / `medium` / `high` (default) for both report calls. Lower is faster and cheaper |
-| `OCR_ENABLED` | `false` turns off OCR of scanned pages |
+| Read a document | Opens a document, whole or by page |
+| Search the case file | Finds every line in every document that mentions a name, number or phrase. This is how it follows a lead |
+| Check a quote | Confirms that some exact words really appear in a document before it relies on them |
+| Record a finding, timeline event, completed item, outstanding item or next step | Adds the item to the report, with the exact words it rests on, or replaces one |
+| Write the overview / the open questions | The summary at the top, and what the records can't settle |
+| Withdraw an item | Takes back something the evidence turns out not to support |
+| Submit the report | Asks for the report to be accepted |
 
-**Cost.**
-- Opus for part 1 and Sonnet for part 2 cost about $1.30–1.70 per investigation.
-- Setting both report models to `claude-haiku-5-5` costs about $0.05–0.10. Quality is lower, but the citation check and the category rule still apply. Use this while testing.
-- Cost never appears in the app, which is built for the case manager. Each run's usage is logged to `data/cases/<id>/spend.jsonl`, failed runs included, and `npm run spend` prints it.
+A typical investigation starts with the documents that say what is *supposed* to be true: the handover memo, CMS notes and task list. It then checks those claims against the source records. When something doesn't add up, it searches the file for every other mention and opens the documents that settle it. It follows these reasoning rules:
+- having no record of something doesn't prove it didn't happen;
+- a missing document, a request never made and an outcome nobody confirmed are three different problems;
+- when two sources disagree, report both and don't pick one;
+- a "Completed" status is not proof the work was done;
+- no conclusions about fault, negligence or what the case is worth.
 
-**Interrupted runs resume.** Each finished AI step is saved to `data/cases/<id>/checkpoint.json`. If a run fails (network drop, laptop asleep), the next run reuses the saved steps instead of paying for them again. If the browser disconnects, the server finishes the run and saves the report.
+And these rules for judging what matters:
+- **rank findings by their effect on the case**, so the first finding is the one to understand first. Anything that could undermine the whole claim comes before routine follow-ups, and the most serious problem gets its own next step;
+- **statements about fault are facts that can be compared**: if the memo blames one driver and the police report cites another, that is reported as a conflict, without deciding who was at fault;
+- **a document that seems to belong to someone else** (a different name, date of birth or address) is flagged as possibly containing another person's private information, kept out of use, and sent to the supervisor and attorney.
 
-**Time remaining** is estimated from this case's last run with the same settings, or from rough defaults until there is one.
+**The rules the agent can't get around:**
+- **Every quote is checked the moment it is recorded.** If the words aren't in the cited document, the agent is told straight away and has to find the exact wording or withdraw the claim.
+- **A submission is refused until the report holds up.** The report is accepted only when:
+  - every page of every document has been read;
+  - every quote has been found;
+  - every high-priority finding has a next step;
+  - every "confirmed incomplete" finding quotes a document that itself states the gap.
 
-## Implemented vs. mocked
+  Otherwise the agent gets the list of problems and has to fix them.
+- **A limit on steps** (60 by default) bounds the time and cost of a run. If it is reached, the report says so.
+- **None of the tools can send anything, contact anyone or change a record.** The agent can only read the file and write the report.
+
+While it works, the case page shows a **live feed of what the agent is doing**: a short sentence of its own reasoning before each move, then each action. This excerpt is from the Daniel Osei run:
+
+> *The memo says Medicare is resolved and the transcript is on file, but the CMS task list shows an open Medicare item and the document index has no transcript. Next I'll read the remaining documents.*
+> …
+> *The file has several conflicts so far: the street address, the PT bill amount, Medicare status, and "liability acknowledged." I'll search for every other mention of the key items before recording anything.*
+> Search · Searched the file for "transcript" — 4 matches in 4 documents
+> Search · Searched the file for "Market Street" — 5 matches in 4 documents
+> Search · Searched the file for "3,150" — 1 match in 1 document
+
+Under the feed, a tally keeps count, for example *"15 documents read · 6 searches · 0 quote checks · 51 items recorded"*.
+
+The same trail is kept with the report, under **"How this report was investigated"**, so anyone can see how each conclusion was reached.
+
+**3. Final check.** After the agent finishes, ordinary code checks every quote in the report one more time against the document it cites. Page numbers are taken from where the words were actually found. Anything that still can't be supported is removed and listed under "Open questions & checks", so nothing disappears silently.
+
+### One finding, from start to finish
+
+How the agent handled the wrong-patient record in the Maria Gonzalez case:
+
+- It began with the memo, the CMS notes and the task list. The memo told the new case manager to *"send the urgent care records to the insurers"*.
+- It then read the rest of the file, including the urgent care record. The record names *Mariela Gonzales*, born 03/02/1991, and describes an ankle sprain from soccer. The client is *Maria L. Gonzalez*, born 11/23/1988, with neck and shoulder pain.
+- Before recording anything, it **searched the file for "Gonzales"**, the other patient's spelling, to check whether that name appeared anywhere else. It appears only on that record.
+- It decided: *"The Cedar record names a different patient, which is the most serious issue, so I'll record it first."* It recorded **F1, Conflicting, high priority**, quoting the record, the client information sheet and the provider list. Every quote was checked on the spot and found.
+- Its first next step overrides the memo: *"Quarantine the Cedar record (doc-05) and escalate the patient identity mismatch. Do not send it to any insurer or use it in any demand or summary."* Its reason: *"Sending it would disclose another person's health information."* The step is escalated to the supervisor and the attorney, and a later step asks the clinic for the client's correct record.
+- On submit, the gate checked that every page had been read and every quote found, and accepted the report.
+
+In the report, clicking the citation opens the urgent care record with the other patient's name highlighted.
+
+### Making it dependable
+
+- **Interrupted runs pick up where they stopped.** The agent's conversation and its draft report are saved after every step. If the connection drops or the laptop sleeps, the next run continues from the last step instead of starting over and paying again. If the browser is closed, the run still finishes and the report is saved.
+- **Checked inputs.** Everything the agent sends to a tool is checked against the expected format, first by the API as it is written and then by the app. If it's wrong, nothing happens and the agent is told why.
+- **The earlier design is still available.** Setting `INVESTIGATION_METHOD=workflow` in `.env.local` runs the investigation as a fixed sequence of steps instead, so the two can be compared on the same case.
+
+### Models and cost
+
+The agent uses one model throughout. The default is **Claude Opus**, the strongest, and it can be changed in `.env.local`.
+
+- **Haiku (measured):** the sample cases so far cost **$0.03–0.05 per investigation and took 2½–4 minutes**. That makes it practical for testing, and every check above still applies.
+- **Opus (estimate, not yet measured):** about $1.50–2.50 per investigation. It should give stronger judgment on difficult files.
+
+The agent re-sends its conversation on every step. That part is cached, which makes it about ten times cheaper. Cost is never shown in the app, which is built for the case manager.
+
+## Results so far
+
+Agent runs on Haiku, compared with each case's answer key:
+
+| Case | Planted problems caught | Notable | Cost | Time |
+|---|---|---|---|---|
+| Robert Kim | 7 of 8 | Mentioned the unidentified property owner only in passing | $0.04 | 3 min 14 s |
+| James Whitaker | 8 of 8 | Linked the returned preservation letter to the second address on the carrier registration | $0.04 | 3 min 24 s |
+| Daniel Osei | 6 of 6 | Read the scanned city letter through OCR; searched for the wrong bill figure across the file | $0.03 | 2 min 24 s |
+| Maria Gonzalez | 6 of 6 | Put the wrong-patient record first and overrode the memo's instruction to send it | $0.03 | 2 min 49 s |
+
+None of the runs drew a legal conclusion or treated a memo's claim as fact. Two things still need work:
+- **Ranking among the high-priority findings.** This has improved since the agent was told to rank by impact, but it needs more runs to confirm.
+- **Tool-call slips with smaller models.** One run spent about 40 extra steps re-sending tool calls that Haiku had formatted wrongly. A settings fix brought that back to normal, and the step limit caps the cost if it happens again.
+
+## What is real and what is not
 
 | | Status |
 |---|---|
-| Reading documents (PDF per page, TXT/MD/CSV/EML) and uploading | **Real** |
-| OCR of scanned PDFs | **Real, local.** No document is sent anywhere and no AI is used, so it works in demo mode too. OCR pages are labelled in the viewer and flagged to the AI as possibly containing errors. Handwriting and poor faxes read badly. English only |
-| AI investigation (Claude via `@anthropic-ai/sdk`) | **Real.** Run live on the Johnson case. Also covered by tests with a mock AI (`tests/engine.test.ts`) |
-| Citation checking, page lookup, highlighting | **Real**, in both modes |
-| Progress and time remaining | **Real** events. Times are estimates |
-| Demo-mode report | **Prepared by hand** for the Johnson case, and checked the same way as an AI report. Labelled everywhere. It also works as a reference answer for comparing AI runs |
+| Reading documents, uploads, local OCR of scanned PDFs | **Real.** OCR works in English only, and handwriting or poor faxes read badly |
+| AI investigation by the agent | **Real.** Run live on four sample cases (see "Results so far"), and covered by tests with a scripted model and a stubbed API |
+| AI investigation by the fixed workflow | **Real.** Run live on the Johnson and Kim cases. Kept as a fallback |
+| Case list: top problem, filters, days without activity, out-of-date report warning | **Real** |
+| Citation checking and highlighting | **Real** |
+| Demo mode (no API key) | A **hand-written example report** for the Johnson case, checked the same way as an AI report and labelled as an example everywhere |
 | Approve / dismiss / edit drafts | **Real, stored locally.** Approving sends nothing and changes nothing |
-| Carrying out actions (`src/lib/integrations.ts`) | **By hand, with files ready.** Simple rules match each step to the systems it would use. Drafts download as .eml or .txt, and tasks as .txt or one CSV. Suggested due dates are 2, 5 or 10 business days by priority |
+| "How to carry this out", draft and task downloads, CSV export | **Real.** Each step is matched to the systems it would use by simple rules |
 | Connections to the CMS, email, document storage, records vendors, fax and phone | **Not built.** Explained on the Connections page |
 | Sign-in, permissions, multiple users | Not built |
-
-## Commands
-
-```bash
-npm test               # unit and end-to-end engine tests (vitest)
-npm run typecheck
-npm run check:schemas  # confirm the report formats compile on the API (needs a key; well under a cent)
-npm run spend          # estimated API spend per investigation, failed runs included
-npm run build && npm start
-npm run seed:pdfs      # regenerate the sample PDFs (add case ids to rebuild only those)
-npm run seed:scanned   # regenerate seed/samples/scanned-pt-intake-fax.pdf (a scanned fax to try uploading)
-rm -rf data/           # reset uploads, runs and decisions
-```
-
-## Project layout
-
-```
-seed/                         sample material (fictional), never modified
-  cases.json                  case list
-  cases/cw-2026-0187/         Johnson: 15 documents
-  cases/cw-2025-0911/         Thompson (clean): 14 documents + TEST-NOTES.md
-  cases/cw-2026-0233/         Kim (messy): 14 documents + TEST-NOTES.md
-  cases/cw-2026-0198/         Whitaker (truck): 16 documents, one scanned + TEST-NOTES.md
-  samples/                    extra files to upload, e.g. a scanned fax
-data/                         runtime state (gitignored)
-  cases/<id>/uploads/         uploaded documents
-  cases/<id>/extracted/       cached text
-  cases/<id>/runs/            reports, kept separate from sources
-  cases/<id>/decisions.json   approve/dismiss decisions
-  cases/<id>/checkpoint.json  finished steps of an interrupted run
-  cases/<id>/spend.jsonl      usage per run
-src/lib/
-  schemas.ts                  report, finding and evidence formats (Zod)
-  citations.ts                strict quote matching (server and browser)
-  extract.ts, ocr.ts          text extraction and local OCR
-  store.ts                    file-based storage
-  integrations.ts             connections catalogue; routing actions to systems; drafts and task exports
-  llm/                        AI provider interface, Claude implementation, prices
-  agent/engine.ts             the investigation pipeline
-  agent/prompts.ts            role, reasoning rules, prompts
-  agent/verify.ts             citation check and category rule
-  agent/eta.ts                time-remaining estimates
-  agent/demo-report.ts        the prepared demo report
-src/app/                      pages (cases, case, report, connections) and API routes
-src/components/               UI: case workspace, report, evidence viewer, recovery plan
-scripts/                      sample-file builders, schema check, spend report
-tests/                        vitest suites
-```
