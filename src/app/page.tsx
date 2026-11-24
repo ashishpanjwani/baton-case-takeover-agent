@@ -1,5 +1,6 @@
 import { CaseBoard, type BoardRow } from "@/components/case-board";
 import type { Finding, Priority } from "@/lib/schemas";
+import { storageIsPersistent } from "@/lib/durable";
 import { latestRun, listCases } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
@@ -62,6 +63,11 @@ export default async function CasesPage() {
           These cases were handled by Dana Whitfield, who has left the firm. For each one, the agent investigates the file and prepares a takeover report: what is done, what is not, and what to do first.
         </p>
       </div>
+      {!storageIsPersistent() && (
+        <div className="mb-4 rounded-md border border-amber/30 bg-amber-soft px-3 py-2.5 text-[13px] text-amber">
+          <strong className="font-semibold">Reports are not being saved on this deployment.</strong> It runs on servers with temporary storage, so a finished report can vanish before you open it. Connect a Vercel Blob store to the project (Storage → Blob), then redeploy.
+        </div>
+      )}
       <CaseBoard rows={rows} />
       <p className="mt-3 text-[12px] text-ink-3">
         All clients, providers, insurers and the firm shown here are fictional. &ldquo;Needs attention&rdquo; shows the most important problem in the latest report. Cases without a report show the open tasks recorded in the CMS.

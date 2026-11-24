@@ -16,6 +16,7 @@ import { createHash, randomUUID } from "node:crypto";
 import os from "node:os";
 import path from "node:path";
 import type { InvestigationRun } from "./agent/types";
+import { createDurable } from "./durable";
 
 const ROOT = process.cwd();
 export const SEED_DIR = path.join(ROOT, "seed");
@@ -29,6 +30,21 @@ export const DATA_DIR = process.env.DATA_DIR
   : process.env.VERCEL
     ? path.join(os.tmpdir(), "baton-data")
     : path.join(ROOT, "data");
+
+/** Runs, decisions and uploads: the data folder locally, a Vercel Blob store when one is connected. */
+const durable = createDurable(DATA_DIR);
+const caseKey = (caseId: string, ...parts: string[]) => ["cases", safeId(caseId), ...parts].join("/");
+
+async function getJson<T>(key: string): Promise<T | null> {
+  const b = await durable.get(key);
+  if (!b) return null;
+  try {
+    return JSON.parse(b.toString("utf8")) as T;
+  } catch {
+    return null;
+  }
+}
+const putJson = (key: string, value: unknown) => durable.put(key, JSON.stringify(value, null, 2), "application/json");
 
 export interface CaseSummary {
   id: string;
@@ -151,15 +167,22 @@ export async function getCase(caseId: string): Promise<CaseDetail | null> {
 const seedDocPath = (caseId: string, filename: string) =>
   path.join(SEED_DIR, "cases", safeId(caseId), "documents", path.basename(filename));
 
+/** One record per upload, plus the single list file older versions wrote. */
 async function listUploads(caseId: string): Promise<UploadRecord[]> {
-  return readJson<UploadRecord[]>(path.join(caseDataDir(caseId), "uploads.json"), []);
+  const legacy = (await getJson<UploadRecord[]>(caseKey(caseId, "uploads.json"))) ?? [];
+  const keys = (await durable.list(caseKey(caseId, "uploads-meta") + "/")).filter((k) => k.endsWith(".json"));
+  const recs = (await Promise.all(keys.map((k) => getJson<UploadRecord>(k)))).filter((r): r is UploadRecord => !!r);
+  const seen = new Set(legacy.map((u) => u.id));
+  return [...legacy, ...recs.filter((r) => !seen.has(r.id))].sort((a, b) => (a.addedAt ?? "").localeCompare(b.addedAt ?? ""));
 }
 
 export async function readDocumentBytes(caseId: string, doc: CaseDocument): Promise<Buffer> {
   if (doc.origin === "seed") return readFile(seedDocPath(caseId, doc.filename));
   const rec = (await listUploads(caseId)).find((u) => u.id === doc.id);
   if (!rec) throw new Error(`Upload ${doc.id} not found`);
-  return readFile(path.join(caseDataDir(caseId), "uploads", path.basename(rec.storedAs)));
+  const bytes = await durable.get(caseKey(caseId, "uploads", path.basename(rec.storedAs)));
+  if (!bytes) throw new Error(`Upload ${doc.id} file is missing`);
+  return bytes;
 }
 
 export async function addUpload(
@@ -169,17 +192,13 @@ export async function addUpload(
   const id = `up-${randomUUID().slice(0, 8)}`;
   const base = path.basename(file.filename).replace(/[^\w.\- ]+/g, "_");
   const storedAs = `${id}__${base}`;
-  const dir = path.join(caseDataDir(caseId), "uploads");
-  await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, storedAs), file.bytes);
+  await durable.put(caseKey(caseId, "uploads", storedAs), file.bytes);
   const rec: UploadRecord = {
     id, filename: base, storedAs, title: file.title?.trim() || base.replace(/\.[^.]+$/, ""),
     category: file.category?.trim() || "Uploaded", documentDate: null, sizeBytes: file.bytes.length,
     addedAt: new Date().toISOString(),
   };
-  const uploads = await listUploads(caseId);
-  uploads.push(rec);
-  await writeJson(path.join(caseDataDir(caseId), "uploads.json"), uploads);
+  await putJson(caseKey(caseId, "uploads-meta", `${id}.json`), rec);
   return { ...rec, kind: kindFor(base), origin: "upload" };
 }
 
@@ -196,38 +215,28 @@ export async function writeExtractionCache(caseId: string, docId: string, value:
 }
 
 export async function saveRun(run: InvestigationRun) {
-  await writeJson(path.join(caseDataDir(run.caseId), "runs", `${safeId(run.id)}.json`), run);
+  await putJson(caseKey(run.caseId, "runs", `${safeId(run.id)}.json`), run);
 }
 
 export async function getRun(caseId: string, runId: string): Promise<InvestigationRun | null> {
-  return readJson<InvestigationRun | null>(path.join(caseDataDir(caseId), "runs", `${safeId(runId)}.json`), null);
+  return getJson<InvestigationRun>(caseKey(caseId, "runs", `${safeId(runId)}.json`));
 }
 
+const runKeys = async (caseId: string) => (await durable.list(caseKey(caseId, "runs") + "/")).filter((k) => k.endsWith(".json"));
+/** Run ids start with their start time ("run-<ms>-..."), so the newest can be found without reading every run. */
+const runTime = (key: string) => Number(/run-(\d+)-/.exec(key)?.[1] ?? 0);
+
 export async function latestRun(caseId: string): Promise<InvestigationRun | null> {
-  const dir = path.join(caseDataDir(caseId), "runs");
-  let files: string[];
-  try {
-    files = (await readdir(dir)).filter((f) => f.endsWith(".json"));
-  } catch {
-    return null;
+  const keys = (await runKeys(caseId)).sort((a, b) => runTime(b) - runTime(a));
+  for (const k of keys) {
+    const r = await getJson<InvestigationRun>(k);
+    if (r) return r;
   }
-  let best: InvestigationRun | null = null;
-  for (const f of files) {
-    const r = await readJson<InvestigationRun | null>(path.join(dir, f), null);
-    if (r && (!best || r.completedAt > best.completedAt)) best = r;
-  }
-  return best;
+  return null;
 }
 
 export async function listRuns(caseId: string): Promise<InvestigationRun[]> {
-  const dir = path.join(caseDataDir(caseId), "runs");
-  let files: string[];
-  try {
-    files = (await readdir(dir)).filter((f) => f.endsWith(".json"));
-  } catch {
-    return [];
-  }
-  const runs = await Promise.all(files.map((f) => readJson<InvestigationRun | null>(path.join(dir, f), null)));
+  const runs = await Promise.all((await runKeys(caseId)).map((k) => getJson<InvestigationRun>(k)));
   return runs.filter((r): r is InvestigationRun => !!r).sort((a, b) => b.completedAt.localeCompare(a.completedAt));
 }
 
@@ -265,17 +274,24 @@ export interface ActionDecision {
 }
 export type DecisionMap = Record<string, ActionDecision>; // key: actionId
 
+/** One record per decision (so quick successive clicks can't overwrite each other), plus the older single file. */
 export async function getDecisions(caseId: string, runId: string): Promise<DecisionMap> {
-  const all = await readJson<Record<string, DecisionMap>>(path.join(caseDataDir(caseId), "decisions.json"), {});
-  return all[runId] ?? {};
+  const legacy = (await getJson<Record<string, DecisionMap>>(caseKey(caseId, "decisions.json")))?.[runId] ?? {};
+  const prefix = caseKey(caseId, "decisions", safeId(runId)) + "/";
+  const keys = (await durable.list(prefix)).filter((k) => k.endsWith(".json"));
+  const out: DecisionMap = { ...legacy };
+  for (const k of keys) {
+    const d = await getJson<ActionDecision | { cleared: true }>(k);
+    const actionId = k.slice(prefix.length, -".json".length);
+    if (!d) continue;
+    if ("cleared" in d) delete out[actionId];
+    else out[actionId] = d;
+  }
+  return out;
 }
 
 export async function setDecision(caseId: string, runId: string, actionId: string, decision: ActionDecision | null) {
-  const file = path.join(caseDataDir(caseId), "decisions.json");
-  const all = await readJson<Record<string, DecisionMap>>(file, {});
-  const forRun = all[runId] ?? {};
-  if (decision) forRun[actionId] = decision;
-  else delete forRun[actionId];
-  all[runId] = forRun;
-  await writeJson(file, all);
+  const key = caseKey(caseId, "decisions", safeId(runId), `${safeId(actionId)}.json`);
+  // An undo is recorded rather than deleted, so it also overrides a decision in the older single file.
+  await putJson(key, decision ?? { cleared: true });
 }
