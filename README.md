@@ -2,13 +2,15 @@
 
 When a personal injury case changes hands, the new case manager inherits a file they have never seen. This prototype reads that file for them. It works out what has really been done, what hasn't, and what nobody can tell from the records. Then it proposes what to do first, and every statement in its report links to the page it came from.
 
+**Live URL:** https://baton-xi-eosin.vercel.app/
+
 > Everything in this project is fictional: the firm, clients, providers, insurers, addresses and phone numbers. Every document is marked `[FICTIONAL DEMO RECORD — NOT A REAL CLIENT]`.
 
 **At a glance**
 - **For:** case managers at US plaintiff-side personal injury firms who inherit a case from a colleague.
 - **What it produces:** a takeover report in which every statement is cited to a page and checked by code. It sorts the work into confirmed incomplete, potentially incomplete, unverified and conflicting, and ends with a prioritised recovery plan with drafts.
 - **How:** a tool-using AI agent runs the investigation: it decides what to read, searches the file to follow leads, and builds the report item by item. Deterministic code enforces the rules it can't talk its way around.
-- **Status:** a working prototype. Next.js and TypeScript on the Anthropic API, local OCR, 57 automated tests. Nothing is connected to real firm systems, and it never sends anything.
+- **Status:** a working prototype. Next.js and TypeScript on the Anthropic API, local OCR, 66 automated tests. Deployed on Vercel. Nothing is connected to real firm systems, and it never sends anything.
 
 ---
 
@@ -199,6 +201,10 @@ The agent works in **rounds**:
 ---
 
 ## Try it
+
+**Online:** [baton-xi-eosin.vercel.app](https://baton-xi-eosin.vercel.app/). Open any case marked "View report", or investigate one marked "Open to investigate".
+
+**Locally:**
 
 ```bash
 npm install
