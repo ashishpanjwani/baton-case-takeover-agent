@@ -37,9 +37,11 @@ function scriptedProvider(script: Call[][], opts: { failAfterTurn?: number; seen
     async runAgentLoop(req: AgentLoopRequest): Promise<AgentLoopResult> {
       const tools = new Map(req.tools.map((t) => [t.name, t]));
       let turn = req.resume?.turn ?? 0;
+      const first = turn;
       const messages = [...(req.resume?.messages ?? [])];
       while (!req.isDone()) {
         if (turn >= req.maxTurns || turn >= script.length) return { turns: turn, stopped: "turn_limit", usage: [] };
+        if (turn > first && req.shouldPause?.()) return { turns: turn, stopped: "paused", usage: [] };
         req.onText?.(`Turn ${turn + 1}: working.`);
         const results: string[] = [];
         for (const [name, input] of script[turn]) {
@@ -144,6 +146,59 @@ describe("investigating agent", () => {
     expect(run.trail!.slice(0, at).filter((t) => t.kind === "read")).toHaveLength(8);
     expect(run.agent).toMatchObject({ stopped: "done" });
     expect(await readCheckpoint(CASE)).toBeNull();
+  });
+
+  it("splits into requests that each pause and continue from a token, even on a server without the saved file", async () => {
+    const { investigateStep, clearCheckpoint, readToken } = await load();
+    const script = await goodScript(false);
+    const seen: string[][] = [];
+    const provider = scriptedProvider(script, { seen });
+    let token = null;
+    let requests = 0;
+    let feed: string[] = [];
+    for (;;) {
+      requests++;
+      const step = await investigateStep({
+        caseId: CASE, provider, method: "agent", today: "2026-11-03", pauseAfterMs: 0, continueFrom: token,
+        onEvent: (e) => { if (e.type === "agent") feed.push(e.entry.text); },
+      });
+      if (step.status === "completed") {
+        expect(step.run.agent).toMatchObject({ stopped: "done" });
+        expect(step.run.report.findings).toHaveLength(12);
+        // One trail across every request, with no "interrupted" note for planned pauses.
+        expect(step.run.trail!.filter((t) => t.kind === "read")).toHaveLength(15);
+        expect(step.run.trail!.some((t) => /interrupted/.test(t.text))).toBe(false);
+        break;
+      }
+      token = step.token;
+      expect(readToken(token)).not.toBeNull();
+      // As if the next request lands on a server that never saw this one.
+      await clearCheckpoint(CASE);
+      expect(requests).toBeLessThan(20);
+    }
+    expect(requests).toBe(script.length); // pauseAfterMs 0: one round per request
+    expect(seen).toHaveLength(script.length); // no round was repeated
+    expect(feed.filter((t) => /interrupted/.test(t))).toHaveLength(0);
+  });
+
+  it("rejects a continuation token that has been altered", async () => {
+    const { investigateStep, readToken } = await load();
+    const step = await investigateStep({ caseId: CASE, provider: scriptedProvider(await goodScript(false)), method: "agent", today: "2026-11-03", pauseAfterMs: 0 });
+    expect(step.status).toBe("paused");
+    if (step.status !== "paused") return;
+    const t = step.token;
+    expect(readToken(t)).not.toBeNull();
+    expect(readToken({ data: t.data.replace("doc-01", "doc-99"), sig: t.sig })).toBeNull();
+    expect(readToken({ data: t.data, sig: "forged" })).toBeNull();
+    expect(readToken(null)).toBeNull();
+  });
+
+  it("pauses only on hosts with a time limit", async () => {
+    const { chunkBudgetMs } = await load();
+    const env = (e: Record<string, string>) => e as unknown as NodeJS.ProcessEnv;
+    expect(chunkBudgetMs(env({}))).toBeUndefined();
+    expect(chunkBudgetMs(env({ VERCEL: "1" }))).toBe(180_000);
+    expect(chunkBudgetMs(env({ VERCEL: "1", INVESTIGATION_CHUNK_SECONDS: "120" }))).toBe(120_000);
   });
 
   it("stops at the step limit and says so", async () => {

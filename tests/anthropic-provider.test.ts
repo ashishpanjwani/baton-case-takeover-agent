@@ -183,6 +183,21 @@ describe("AnthropicProvider agent loop", () => {
     expect(m4.at(-1)!.content).toBe("Please submit.");
   });
 
+  it("pauses only between turns, after making progress, when asked to", async () => {
+    const loop = Array.from({ length: 5 }, (_, k) => ({ stop: "tool_use", content: [use(`p${k}`, "echo", { word: "w" })] }));
+    const a = stubbedAgent(loop);
+    let saved: { messages: unknown[]; turn: number } | null = null;
+    const r = await a.provider.runAgentLoop({
+      role: "reasoning", label: "t", system: "s", prompt: "p", effort: "low", maxTokensPerTurn: 100, maxTurns: 10,
+      tools: [{ name: "echo", description: "e", input: z.object({ word: z.string() }), run: () => ({ content: "ok" }) }],
+      isDone: () => false, nudge: "n", shouldPause: () => true, onTurn: (t) => { saved = structuredClone(t); },
+    });
+    // Even with shouldPause always true, one turn runs first so every request makes progress.
+    expect(r).toMatchObject({ turns: 1, stopped: "paused" });
+    expect(a.sent).toHaveLength(1);
+    expect(saved!.turn).toBe(1);
+  });
+
   it("stops at the turn limit, and resumes a saved conversation", async () => {
     const loop = (turns: number) => Array.from({ length: turns }, (_, k) => ({ stop: "tool_use", content: [use(`x${k}`, "echo", { word: "w" })] }));
     const tools = [{ name: "echo", description: "e", input: z.object({ word: z.string() }), run: () => ({ content: "ok" }) }];

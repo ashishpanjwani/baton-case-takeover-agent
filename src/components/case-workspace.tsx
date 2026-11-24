@@ -144,9 +144,33 @@ function InvestigatePanel({ caseId, documents, mode, lastRun }: Parameters<typeo
     setEvents([]);
     setLostConnection(false);
     setRunning(true);
-    let finished = false;
+    // On hosts that limit request length, the server pauses between rounds and returns a
+    // token; continue with it until the investigation completes or fails.
+    let token: unknown = null;
     try {
-      const res = await fetch(`/api/cases/${caseId}/investigate`, { method: "POST" });
+      for (;;) {
+        const outcome = await runRequest(token);
+        if (outcome.kind === "paused") {
+          token = outcome.token;
+          continue;
+        }
+        if (outcome.kind === "lost") setLostConnection(true);
+        break;
+      }
+    } finally {
+      setRunning(false);
+      router.refresh();
+    }
+  }
+
+  /** One request: streams its events into the panel and reports how it ended. */
+  async function runRequest(token: unknown): Promise<{ kind: "done" } | { kind: "paused"; token: unknown } | { kind: "lost" }> {
+    try {
+      const res = await fetch(`/api/cases/${caseId}/investigate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(token ? { continueFrom: token } : {}),
+      });
       if (!res.body) throw new Error("No response stream");
       const reader = res.body.getReader();
       const dec = new TextDecoder();
@@ -160,17 +184,15 @@ function InvestigatePanel({ caseId, documents, mode, lastRun }: Parameters<typeo
         for (const l of lines) {
           if (!l.trim()) continue;
           const e = JSON.parse(l) as InvestigationEvent;
-          if (e.type === "completed" || e.type === "failed") finished = true;
+          if (e.type === "paused") return { kind: "paused", token: e.token };
           setEvents((ev) => [...ev, e]);
+          if (e.type === "completed" || e.type === "failed") return { kind: "done" };
         }
       }
-      if (!finished) setLostConnection(true);
+      return { kind: "lost" };
     } catch {
       // The connection to the progress updates dropped. The server keeps working and saves the report.
-      if (!finished) setLostConnection(true);
-    } finally {
-      setRunning(false);
-      router.refresh();
+      return { kind: "lost" };
     }
   }
 
@@ -299,9 +321,10 @@ function summarise(events: InvestigationEvent[]) {
   let endedAt: string | null = null;
   for (const e of events) {
     if (e.type === "run_started") {
-      startedAt = e.at;
-      estimates = e.estimates ?? null;
-      method = e.method ?? null;
+      // A continued investigation starts each request with run_started again; keep the first.
+      startedAt ??= e.at;
+      estimates ??= e.estimates ?? null;
+      method ??= e.method ?? null;
     }
     if (e.type === "agent") trail.push(e.entry);
     if (e.type === "stage") {

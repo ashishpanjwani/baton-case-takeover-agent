@@ -44,7 +44,7 @@ export interface InvestigationRun {
   /** What the agent did, step by step (agent runs only). */
   trail?: TrailEntry[];
   /** Model turns the agent used, and whether it finished or hit the limit (agent runs only). */
-  agent?: { turns: number; maxTurns: number; stopped: "done" | "turn_limit" };
+  agent?: { turns: number; maxTurns: number; stopped: "done" | "turn_limit" | "paused" };
 }
 
 /**
@@ -103,4 +103,6 @@ export type InvestigationEvent =
   /** Something the agent did, as it happens. */
   | { type: "agent"; at: string; entry: TrailEntry; turn?: number; maxTurns?: number }
   | { type: "completed"; at: string; runId: string }
+  /** This request has done its share; the browser continues with the token in a new request. */
+  | { type: "paused"; at: string; token: { data: string; sig: string } }
   | { type: "failed"; at: string; error: string };

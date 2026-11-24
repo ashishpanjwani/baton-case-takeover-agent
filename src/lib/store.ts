@@ -13,12 +13,22 @@
  */
 import { appendFile, mkdir, readFile, readdir, rename, rm, writeFile, stat } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
+import os from "node:os";
 import path from "node:path";
 import type { InvestigationRun } from "./agent/types";
 
 const ROOT = process.cwd();
 export const SEED_DIR = path.join(ROOT, "seed");
-export const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(ROOT, "data");
+/**
+ * Runtime state (runs, uploads, decisions). On Vercel the app folder is read-only, so
+ * this defaults to the temporary folder there. That folder is not permanent: it is
+ * cleared from time to time and not shared between servers.
+ */
+export const DATA_DIR = process.env.DATA_DIR
+  ? path.resolve(process.env.DATA_DIR)
+  : process.env.VERCEL
+    ? path.join(os.tmpdir(), "baton-data")
+    : path.join(ROOT, "data");
 
 export interface CaseSummary {
   id: string;

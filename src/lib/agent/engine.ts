@@ -18,7 +18,7 @@
  * asleep), the next run reuses those steps instead of paying for them again.
  * API usage of every run, failed ones included, is appended to spend.jsonl.
  */
-import { randomUUID } from "node:crypto";
+import { createHmac, randomUUID, timingSafeEqual } from "node:crypto";
 import { extractDocument, type ExtractedDocument } from "../extract";
 import type { LLMProvider } from "../llm";
 import { LLMError, type CallUsage, type ModelRole } from "../llm/provider";
@@ -40,7 +40,70 @@ export interface InvestigateOptions {
   today?: string;
   /** Defaults to INVESTIGATION_METHOD (agent unless set to "workflow"). */
   method?: InvestigationMethod;
+  /**
+   * Pause the agent between rounds once this request has run this long, and hand back a
+   * token to continue with. Keeps each request inside a host's time limit (e.g. Vercel's).
+   */
+  pauseAfterMs?: number;
+  /** Continue a paused investigation, with the token the paused request returned. */
+  continueFrom?: ContinuationToken | null;
 }
+
+/**
+ * How long one request may run the agent before pausing: INVESTIGATION_CHUNK_SECONDS, or
+ * 180 seconds on Vercel (whose free plan stops a request at 300; one round can take over a minute).
+ * Undefined means no pausing, as when running locally.
+ */
+export function chunkBudgetMs(env: NodeJS.ProcessEnv = process.env): number | undefined {
+  const n = Number(env.INVESTIGATION_CHUNK_SECONDS);
+  if (Number.isFinite(n) && n > 0) return n * 1000;
+  return env.VERCEL ? 180_000 : undefined;
+}
+
+/** A paused investigation, held by the browser between requests. Signed so it can't be altered. */
+export interface ContinuationToken {
+  data: string;
+  sig: string;
+}
+
+/** What a paused agent run needs to carry on. */
+interface AgentCheckpoint {
+  key: string;
+  state: InvestigatorState;
+  transcript: AgentTranscript;
+  trail: TrailEntry[];
+  /** When the investigation first started, and when its agent stage started, so timing spans every request. */
+  startedAt?: string;
+  investigateStartedAt?: string;
+  /** API usage from the earlier requests of this investigation. */
+  usage?: CallUsage[];
+}
+
+const tokenSecret = () => process.env.CHECKPOINT_SECRET || sha256(`baton-continuation|${process.env.ANTHROPIC_API_KEY ?? ""}`);
+const sign = (data: string) => createHmac("sha256", tokenSecret()).update(data).digest("base64url");
+
+function makeToken(cp: AgentCheckpoint): ContinuationToken {
+  const data = JSON.stringify(cp);
+  return { data, sig: sign(data) };
+}
+
+/** The checkpoint inside a token, or null if the token is missing, altered or malformed. */
+export function readToken(t: ContinuationToken | null | undefined): AgentCheckpoint | null {
+  if (!t || typeof t.data !== "string" || typeof t.sig !== "string") return null;
+  const expected = Buffer.from(sign(t.data));
+  const given = Buffer.from(t.sig);
+  if (expected.length !== given.length || !timingSafeEqual(expected, given)) return null;
+  try {
+    return JSON.parse(t.data) as AgentCheckpoint;
+  } catch {
+    return null;
+  }
+}
+
+/** One request's worth of an investigation: either finished, or paused with a token to continue. */
+export type InvestigationStep =
+  | { status: "completed"; run: InvestigationRun }
+  | { status: "paused"; token: ContinuationToken };
 
 /**
  * How AI investigations run. "agent" unless INVESTIGATION_METHOD=workflow,
@@ -69,7 +132,7 @@ interface Checkpoint {
   analyses: Record<string, DocumentAnalysis>;
   part1: { key: string; output: ReportPart1 } | null;
   /** The agent's conversation and working report, saved after every turn. */
-  agent?: { key: string; state: InvestigatorState; transcript: AgentTranscript; trail: TrailEntry[] } | null;
+  agent?: AgentCheckpoint | null;
 }
 
 /** Mutable state shared with the failure handler, so a failed run's usage is still recorded. */
@@ -78,7 +141,15 @@ interface RunState {
   calls: CallUsage[];
 }
 
+/** Runs a whole investigation in one go. Use investigateStep to allow pausing. */
 export async function investigate(opts: InvestigateOptions): Promise<InvestigationRun> {
+  const step = await investigateStep(opts);
+  if (step.status === "paused") throw new Error("The investigation paused; continue it with investigateStep.");
+  return step.run;
+}
+
+/** Runs an investigation, or one request's share of it when pauseAfterMs is set. */
+export async function investigateStep(opts: InvestigateOptions): Promise<InvestigationStep> {
   const log: InvestigationEvent[] = [];
   const emit = (e: InvestigationEvent) => {
     log.push(e);
@@ -91,7 +162,7 @@ export async function investigate(opts: InvestigateOptions): Promise<Investigati
   const state: RunState = { runId: null, calls: [] };
   try {
     const result = await run(opts, emit, log, state);
-    if (opts.provider) await recordSpend(opts.caseId, state, "completed", null);
+    if (opts.provider) await recordSpend(opts.caseId, state, result.status, null);
     return result;
   } catch (err) {
     if (err instanceof LLMError) state.calls.push(...err.usage);
@@ -101,7 +172,7 @@ export async function investigate(opts: InvestigateOptions): Promise<Investigati
   }
 }
 
-async function recordSpend(caseId: string, state: RunState, status: "completed" | "failed", error: string | null) {
+async function recordSpend(caseId: string, state: RunState, status: "completed" | "paused" | "failed", error: string | null) {
   const costs = state.calls.map((c) => c.costUsd);
   await appendSpend(caseId, {
     at: now(), runId: state.runId, status, error,
@@ -116,7 +187,8 @@ async function run(
   emit: (e: InvestigationEvent) => void,
   log: InvestigationEvent[],
   state: RunState,
-): Promise<InvestigationRun> {
+): Promise<InvestigationStep> {
+  const requestStart = Date.now();
   const c = await getCase(opts.caseId);
   if (!c) throw new Error(`Case ${opts.caseId} not found`);
   if (c.documents.length === 0) throw new Error("This case has no documents to investigate.");
@@ -130,7 +202,9 @@ async function run(
 
   const runId = `run-${Date.now()}-${randomUUID().slice(0, 6)}`;
   state.runId = runId;
-  const startedAt = now();
+  // A continuation from the browser: carry on quietly, as one investigation.
+  const carried = provider ? readToken(opts.continueFrom) : null;
+  const startedAt = carried?.startedAt ?? now();
   const notices: string[] = [];
   const method: InvestigationMethod = opts.method && provider?.runAgentLoop ? opts.method : investigationMethod(provider);
   const estimates = provider ? await estimateSteps(c.id, provider, c.documents.length, method) : null;
@@ -139,8 +213,10 @@ async function run(
   // 1. Extract
   emit({ type: "stage", at: now(), stage: "extract", status: "started", detail: `${c.documents.length} documents` });
   const extracted = new Map<string, ExtractedDocument>();
+  // When continuing, the documents were already prepared and shown; don't repeat their progress.
+  const docEvent = (e: InvestigationEvent) => { if (!carried) emit(e); };
   for (const d of c.documents) {
-    emit({ type: "document", at: now(), stage: "extract", docId: d.id, title: d.title, status: "started" });
+    docEvent({ type: "document", at: now(), stage: "extract", docId: d.id, title: d.title, status: "started" });
     try {
       const x = await extractDocument(c.id, d);
       extracted.set(d.id, x);
@@ -155,13 +231,13 @@ async function run(
         );
       }
       const ocrNote = x.ocrPages.length ? ` (OCR on ${x.ocrPages.length} page${x.ocrPages.length > 1 ? "s" : ""})` : "";
-      emit({
+      docEvent({
         type: "document", at: now(), stage: "extract", docId: d.id, title: d.title, status: empty ? "failed" : "completed",
         detail: `${d.kind === "pdf" ? `${x.pages.length} page${x.pages.length === 1 ? "" : "s"}, ` : ""}${x.charCount.toLocaleString()} characters${ocrNote}${empty ? " — no extractable text" : ""}`,
       });
     } catch (e) {
       notices.push(`Could not read "${d.title}": ${e instanceof Error ? e.message : e}`);
-      emit({ type: "document", at: now(), stage: "extract", docId: d.id, title: d.title, status: "failed", detail: "Could not extract text" });
+      docEvent({ type: "document", at: now(), stage: "extract", docId: d.id, title: d.title, status: "failed", detail: "Could not extract text" });
     }
   }
   emit({ type: "stage", at: now(), stage: "extract", status: "completed" });
@@ -176,6 +252,7 @@ async function run(
   let analyses: DocumentAnalysis[] | null = null;
   let trail: TrailEntry[] | undefined;
   let agentInfo: InvestigationRun["agent"];
+  let priorCalls: CallUsage[] = [];
   let analysedIds: Set<string>;
   const calls = state.calls;
 
@@ -197,7 +274,12 @@ async function run(
       const system = investigatorSystem();
       const prompt = investigatorPrompt({ caseContext: ctx, today: opts.today ?? now().slice(0, 10), documents: promptDocs });
       const key = keyOf("reasoning", system, prompt);
-      const resume = cp.agent?.key === key ? cp.agent : null;
+      // Prefer the browser's token (a planned continuation, possibly on another server), then
+      // the saved checkpoint (an interrupted run on this server).
+      const fromToken = carried?.key === key ? carried : null;
+      const resume = fromToken ?? (cp.agent?.key === key ? cp.agent : null);
+      const priorUsage = resume?.usage ?? [];
+      const investigateStartedAt = resume?.investigateStartedAt ?? now();
       const st: InvestigatorState = resume ? resume.state : emptyState();
       const steps: TrailEntry[] = resume ? [...resume.trail] : [];
       const maxTurns = agentMaxTurns();
@@ -206,8 +288,11 @@ async function run(
         steps.push(entry);
         emit({ type: "agent", at: now(), entry, turn, maxTurns });
       };
-      emit({ type: "stage", at: now(), stage: "investigate", status: "started", detail: resume ? "Continuing the interrupted investigation" : undefined });
-      if (resume) log({ kind: "thought", text: "Continuing from where the interrupted run stopped." });
+      emit({ type: "stage", at: investigateStartedAt, stage: "investigate", status: "started", detail: resume && !fromToken ? "Continuing the interrupted investigation" : undefined });
+      if (resume && !fromToken) log({ kind: "thought", text: "Continuing from where the interrupted run stopped." });
+      const snapshot = (t: AgentTranscript): AgentCheckpoint => ({
+        key, state: st, transcript: t, trail: steps, startedAt, investigateStartedAt, usage: [...priorUsage, ...calls],
+      });
       const r = await provider.runAgentLoop!({
         role: "reasoning", label: "investigation", system, prompt,
         tools: investigatorTools(promptDocs, st, log),
@@ -219,11 +304,24 @@ async function run(
         resume: resume?.transcript ?? null,
         onTurn: (t) => {
           turn = t.turn;
-          cp.agent = { key, state: st, transcript: t, trail: steps };
+          cp.agent = snapshot(t);
           persist();
         },
+        shouldPause: () => opts.pauseAfterMs !== undefined && Date.now() - requestStart > opts.pauseAfterMs,
       });
       calls.push(...r.usage);
+      if (r.stopped === "paused") {
+        // Hand the browser everything needed to carry on, even on a different server.
+        const paused = snapshot(cp.agent!.transcript);
+        cp.agent = paused;
+        persist();
+        await saving;
+        const token = makeToken(paused);
+        emit({ type: "paused", at: now(), token });
+        return { status: "paused", token };
+      }
+      // The run's usage covers every request of this investigation; the spend log records each request separately.
+      priorCalls = priorUsage;
       if (r.stopped === "turn_limit") {
         log({ kind: "submit", ok: false, text: "Stopped at the limit on how much work one investigation may do; the report holds what had been established" });
         notices.push("The agent reached the limit on how much work one investigation may do before it finished. The report contains what it had established by then, and may be missing items.");
@@ -344,13 +442,13 @@ async function run(
   const result: InvestigationRun = {
     id: runId, caseId: c.id, mode, provider: provider?.name ?? null, models: provider?.models ?? null,
     configKeys: provider ? configKeys(provider) : null,
-    usage: provider ? summariseUsage(calls, provider.models) : null,
+    usage: provider ? summariseUsage([...priorCalls, ...calls], provider.models) : null,
     startedAt, completedAt, documents, documentAnalyses: analyses,
     report: verified.report, verification: v, notices, log,
     method: provider ? method : undefined, trail, agent: agentInfo,
   };
   await saveRun(result);
-  return result;
+  return { status: "completed", run: result };
 }
 
 async function mapLimit<T, R>(items: T[], limit: number, fn: (t: T) => Promise<R>): Promise<R[]> {

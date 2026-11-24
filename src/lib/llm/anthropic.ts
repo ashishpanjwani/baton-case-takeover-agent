@@ -147,8 +147,11 @@ export class AnthropicProvider implements LLMProvider {
     let badJson = 0;
 
     const fail = (msg: string) => new LLMError(msg, req.label, usage);
+    const firstTurn = turn;
     while (!req.isDone()) {
       if (turn >= req.maxTurns) return { turns: turn, stopped: "turn_limit", usage };
+      // Pause only between turns, and only after making progress in this call.
+      if (turn > firstTurn && req.shouldPause?.()) return { turns: turn, stopped: "paused", usage };
       let msg: BetaMessage;
       try {
         msg = await this.client.beta.messages

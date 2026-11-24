@@ -97,11 +97,17 @@ export interface AgentLoopRequest {
   resume?: AgentTranscript | null;
   /** Called after every completed turn with the conversation so far. */
   onTurn?(t: AgentTranscript): void;
+  /**
+   * Checked before each new turn (after at least one turn in this call). Returning true
+   * stops the loop cleanly so it can be continued later from `onTurn`'s transcript, e.g.
+   * to stay inside a hosting platform's time limit per request.
+   */
+  shouldPause?(): boolean;
 }
 
 export interface AgentLoopResult {
   turns: number;
-  stopped: "done" | "turn_limit";
+  stopped: "done" | "turn_limit" | "paused";
   usage: CallUsage[];
 }
 

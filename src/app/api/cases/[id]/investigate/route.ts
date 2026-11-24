@@ -1,14 +1,30 @@
-import { investigate } from "@/lib/agent/engine";
+import { chunkBudgetMs, investigateStep, type ContinuationToken } from "@/lib/agent/engine";
 import type { InvestigationEvent } from "@/lib/agent/types";
 import { getProvider } from "@/lib/llm";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const maxDuration = 600;
+// Vercel's free (Hobby) plan allows at most 300 seconds per request; a larger value fails the deployment.
+// On a paid plan this can be raised (e.g. 600), since an investigation can take several minutes.
+export const maxDuration = 300;
 
-/** Streams investigation progress as newline-delimited JSON events. */
-export async function POST(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+/**
+ * Streams investigation progress as newline-delimited JSON events.
+ *
+ * Where a host limits how long a request may run (Vercel), the agent pauses between
+ * rounds before the limit and the stream ends with a "paused" event carrying a token.
+ * The browser then calls again with { continueFrom: token } and the investigation
+ * carries on from where it stopped.
+ */
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  let continueFrom: ContinuationToken | null = null;
+  try {
+    const body = (await req.json()) as { continueFrom?: ContinuationToken };
+    continueFrom = body?.continueFrom ?? null;
+  } catch {
+    // No body: a fresh investigation.
+  }
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
@@ -24,7 +40,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
         }
       };
       try {
-        await investigate({ caseId: id, provider: getProvider(), onEvent: send });
+        await investigateStep({ caseId: id, provider: getProvider(), onEvent: send, pauseAfterMs: chunkBudgetMs(), continueFrom });
       } catch {
         // "failed" event already emitted by the engine
       } finally {
